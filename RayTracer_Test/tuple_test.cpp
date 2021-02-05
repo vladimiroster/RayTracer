@@ -1,0 +1,132 @@
+#include "pch.h"
+#include "../RayTracer/Tuple.h"
+
+using namespace RayTracer;
+
+TEST(TestTuple, TestTuplePointCreate) {
+  Tuple a(4.3f, -4.2f, 3.1f, 1.0f);
+
+  EXPECT_TRUE(ApproxEqual(a.x, 4.3f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.y, -4.2f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.z, 3.1f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.w, 1.0f, epsilon));
+}
+
+TEST(TestTuple, TestTupleVectorCreate) {
+  Tuple a(4.3f, -4.2f, 3.1f, 0.0f);
+
+  EXPECT_TRUE(ApproxEqual(a.x, 4.3f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.y, -4.2f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.z, 3.1f, epsilon));
+  EXPECT_TRUE(ApproxEqual(a.w, 0.0f, epsilon));
+}
+TEST(TestTuple, TestPointCreate) {
+  Point p(4.0f, -4.0f, 3.0f);
+
+  EXPECT_EQ(Tuple(4.0f, -4.0f, 3.0f, 1.0f), p);
+}
+
+TEST(TestTuple, TestVectorCreate) {
+  Vector p(4.0f, -4.0f, 3.0f);
+
+  EXPECT_EQ(Tuple(4.0f, -4.0f, 3.0f, 0.0f), p);
+}
+
+TEST(TestTuple, TestTupleAdd) {
+  Tuple a(3.0f, -2.0f, 5.0f, 1.0f);
+  Tuple b(-2.0f, 3.0f, 1.0f, 0.0f);
+
+  EXPECT_EQ(Tuple(1.0f, 1.0f, 6.0f, 1.0f), a+b);
+}
+
+TEST(TestTuple, TestPointPointSub) {
+  Point a(3.0f, 2.0f, 1.0f);
+  Point b(5.0f, 6.0f, 7.0f);
+
+  EXPECT_EQ(Vector(-2.0f, -4.0f, -6.0f), a-b);
+}
+
+TEST(TestTuple, TestPointVectorSub) {
+  Point  a(3.0f, 2.0f, 1.0f);
+  Vector b(5.0f, 6.0f, 7.0f);
+
+  EXPECT_EQ(Point(-2.0f, -4.0f, -6.0f), a-b);
+}
+
+TEST(TestTuple, TestVectorVectorSub) {
+  Vector a(3.0f, 2.0f, 1.0f);
+  Vector b(5.0f, 6.0f, 7.0f);
+
+  EXPECT_EQ(Vector(-2.0f, -4.0f, -6.0f), a-b);
+}
+
+TEST(TestTuple, TestTupleNeg) {
+  Tuple a(1.0f, -2.0f, 3.0f, -4.0f);
+
+  EXPECT_EQ(Tuple(-1.0f, 2.0f, -3.0f, 4.0f), -a);
+}
+
+TEST(TestTuple, TestMulTupleScalar) {
+  Tuple a(1.0f, -2.0f, 3.0f, -4.0f);
+  EXPECT_EQ(Tuple(3.5f, -7.0, 10.5f, -14.0f), a * 3.5f);
+}
+
+TEST(TestTuple, TestMulTupleFraction) {
+  Tuple a(1.0f, -2.0f, 3.0f, -4.0f);
+  EXPECT_EQ(Tuple(0.5f, -1.0, 1.5f, -2.0f), a * 0.5f);
+}
+
+TEST(TestTuple, TestDivTupleScalar) {
+  Tuple a(1.0f, -2.0f, 3.0f, -4.0f);
+  EXPECT_EQ(Tuple(0.5f, -1.0, 1.5f, -2.0f), a / 2.0f);
+}
+
+TEST(TestTuple, TestMagVec100) {
+  Vector v(1.0f, 0.0f, 0.0f);
+  EXPECT_EQ(1.0f, magnitude(v));
+}
+
+TEST(TestTuple, TestMagVec010) {
+  Vector v(0.0f, 1.0f, 0.0f);
+  EXPECT_EQ(1.0f, magnitude(v));
+}
+
+TEST(TestTuple, TestMagVec001) {
+  Vector v(0.0f, 0.0f, 1.0f);
+  EXPECT_EQ(1.0f, magnitude(v));
+}
+
+TEST(TestTuple, TestMagVec) {
+  Vector v(1.0f, 2.0f, 3.0f);
+  EXPECT_EQ(sqrtf(14.0f), magnitude(v));
+}
+
+TEST(TestTuple, TestMagVecNeg) {
+  Vector v(-1.0f, -2.0f, -3.0f);
+  EXPECT_EQ(sqrtf(14.0f), magnitude(v));
+}
+
+TEST(TestTuple, TestNormalizeVecSingle) {
+  Vector v(4.0f, 0.0f, 0.0f);
+  EXPECT_EQ(Vector(1.0f, 0.0f, 0.0f), normalize(v));
+}
+
+TEST(TestTuple, TestNormalizeVecRegular) {
+  Vector v(1.0f, 2.0f, 3.0f);
+  EXPECT_EQ(Vector(0.26726f, 0.53452f, 0.80178f), normalize(v));
+}
+
+TEST(TestTuple, TestVectorDotProduct) {
+  Vector v1(1.0f, 2.0f, 3.0f);
+  Vector v2(2.0f, 3.0f, 4.0f);
+
+  EXPECT_EQ(20.0f, dot(v1, v2));
+}
+
+TEST(TestTuple, TestVectorCrossProduct) {
+  Vector v1(1.0f, 2.0f, 3.0f);
+  Vector v2(2.0f, 3.0f, 4.0f);
+
+  EXPECT_EQ(Vector(-1.0f, 2.0f, -1.0f), cross(v1, v2));
+  EXPECT_EQ(Vector(1.0f, -2.0f, 1.0f), cross(v2, v1));
+}
