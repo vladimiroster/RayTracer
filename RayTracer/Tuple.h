@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 namespace RayTracer {
   constexpr float epsilon = 0.00001f;
 
@@ -28,70 +30,18 @@ namespace RayTracer {
     Color(float r, float g, float b) : Tuple(r, g, b, 0.0f) {}
   };
 
-  inline bool operator==(const Tuple& lhs, const Tuple& rhs) {
-    return ApproxEqual(lhs.x, rhs.x, epsilon) &&
-      ApproxEqual(lhs.y, rhs.y, epsilon) &&
-      ApproxEqual(lhs.z, rhs.z, epsilon) &&
-      ApproxEqual(lhs.w, rhs.w, epsilon);
-  }
-
-  inline std::ostream& operator<<(std::ostream& os, const Tuple& t) {
-    os << "(" << t.x << ", " << t.y << ", " << t.z << ", " << t.w << ")";
-    return os;
-  }
-
-  inline Tuple operator-(const Tuple& a) {
-    return Tuple(-a.x, -a.y, -a.z, -a.w);
-  }
-
-  inline Tuple operator+(const Tuple& lhs, const Tuple& rhs) {
-    return Tuple(lhs.x + rhs.x,
-      lhs.y + rhs.y,
-      lhs.z + rhs.z,
-      lhs.w + rhs.w);
-  }
-
-  inline Tuple operator-(const Tuple& lhs, const Tuple& rhs) {
-    return lhs + (-rhs);
-  }
-
-  inline Tuple operator*(const Tuple& lhs, float scalar) {
-    return Tuple(lhs.x * scalar,
-      lhs.y * scalar,
-      lhs.z * scalar,
-      lhs.w * scalar);
-  }
-
-  inline Tuple operator/(const Tuple& lhs, float scalar) {
-    return Tuple(lhs.x / scalar,
-      lhs.y / scalar,
-      lhs.z / scalar,
-      lhs.w / scalar);
-  }
-
-  inline float magnitude(const Tuple& tpl) {
-    return sqrtf(pow(tpl.x, 2) + pow(tpl.y, 2) + pow(tpl.z, 2) + pow(tpl.w, 2));
-  }
-
-  inline Tuple normalize(const Tuple& tpl) {
-    return tpl / magnitude(tpl);
-  }
-
-  inline float dot(const Tuple& lhs, const Tuple& rhs) {
-    return lhs.x * rhs.x +
-      lhs.y * rhs.y +
-      lhs.z * rhs.z +
-      lhs.w * rhs.w;
-  }
-
-  inline Vector cross(const Vector& lhs, const Vector& rhs) {
-    return Vector(lhs.y * rhs.z - lhs.z * rhs.y,
-      lhs.z * rhs.x - lhs.x * rhs.z,
-      lhs.x * rhs.y - lhs.y * rhs.x);
-  }
-
+  bool operator==(const Tuple& lhs, const Tuple& rhs);
+  std::ostream& operator<<(std::ostream& os, const Tuple& t);
+  Tuple operator-(const Tuple& a);
+  Tuple operator+(const Tuple& lhs, const Tuple& rhs);
+  Tuple operator-(const Tuple& lhs, const Tuple& rhs);
+  Tuple operator*(const Tuple& lhs, float scalar);
+  Tuple operator/(const Tuple& lhs, float scalar);
+  float magnitude(const Tuple& tpl);
+  Tuple normalize(const Tuple& tpl);
+  float dot(const Tuple& lhs, const Tuple& rhs);
+  Vector cross(const Vector& lhs, const Vector& rhs);
   // Hadamard product (Schur product)
-  inline Color operator*(const Color& lhs, const Color& rhs) {
-    return Color(lhs.x * rhs.x, lhs.y  * rhs.y, lhs.z * rhs.z);
-  }
-}
+  Color operator*(const Color& lhs, const Color& rhs);
+
+} // namespace RayTracer

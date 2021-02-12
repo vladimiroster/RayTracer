@@ -47,12 +47,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RayTracer\RayTracer.vcxproj">
-      <Project>{a85b6f33-2f53-4048-867c-990dfb597eda}</Project>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\RayTracerLib\RayTracerLib.vcxproj">
+      <Project>{18e0f267-9998-4866-8321-1c09b7545e60}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
