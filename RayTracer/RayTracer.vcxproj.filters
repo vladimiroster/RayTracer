@@ -16,7 +16,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataTypes.h">
+    <ClInclude Include="Tuple.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Elements.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
