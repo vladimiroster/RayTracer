@@ -9,6 +9,10 @@ namespace RayTracer {
       ApproxEqual(lhs.w, rhs.w, epsilon);
   }
 
+  bool operator!=(const Tuple& lhs, const Tuple& rhs) {
+    return !(lhs == rhs);
+  }
+
   std::ostream& operator<<(std::ostream& os, const Tuple& t) {
     os << "(" << t.x << ", " << t.y << ", " << t.z << ", " << t.w << ")";
     return os;

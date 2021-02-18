@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "../RayTracer/Canvas.h"
-#include "../RayTracer/Tuple.h"
+#include "../RayTracerLib/Canvas.h"
+#include "../RayTracerLib/Tuple.h"
 
 #include <iostream>
 

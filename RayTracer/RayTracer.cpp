@@ -4,8 +4,9 @@
 #include <iostream>
 #include <fstream>
 
-#include "Tuple.h"
-#include "Canvas.h"
+#include "../RayTracerLib/Tuple.h"
+#include "../RayTracerLib/Canvas.h"
+#include "../RayTracerLib/Matrix.h"
 
 #include "Elements.h"
 

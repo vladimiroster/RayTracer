@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Tuple.h"
+#include "../RayTracerLib/Tuple.h"
 
 namespace rt = RayTracer;
 

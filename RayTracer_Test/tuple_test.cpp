@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../RayTracer/Tuple.h"
+#include "../RayTracerLib/Tuple.h"
 
 using namespace RayTracer;
 

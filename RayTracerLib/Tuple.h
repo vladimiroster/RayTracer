@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <iostream>
 
 namespace RayTracer {
@@ -13,7 +14,30 @@ namespace RayTracer {
     float x,y,z,w;
 
     Tuple(float x1, float y1, float z1, float w1) : x(x1), y(y1), z(z1), w(w1) {}
+    Tuple(std::array<float, 4> arr) {
+      x = arr[0];
+      y = arr[1];
+      z = arr[2];
+      w = arr[3];
+    }
+
+    float operator[](size_t idx) {
+      switch (idx) {
+      case 0: return x;
+        break;
+      case 1: return y;
+        break;
+      case 2: return z;
+        break;
+      case 4: return w;
+        break;
+      default:
+        throw std::invalid_argument("Tuple has only 4 data members");
+      }
+    }
   };
+
+  inline const Tuple zero(0, 0, 0, 0);
 
   struct Point : public Tuple {
     Point(float x1, float y1, float z1) : Tuple(x1, y1, z1, 1.0f) {}
@@ -31,6 +55,7 @@ namespace RayTracer {
   };
 
   bool operator==(const Tuple& lhs, const Tuple& rhs);
+  bool operator!=(const Tuple& lhs, const Tuple& rhs);
   std::ostream& operator<<(std::ostream& os, const Tuple& t);
   Tuple operator-(const Tuple& a);
   Tuple operator+(const Tuple& lhs, const Tuple& rhs);
