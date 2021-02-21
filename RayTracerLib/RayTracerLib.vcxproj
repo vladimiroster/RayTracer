@@ -127,11 +127,13 @@
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Transformation.h" />
     <ClInclude Include="Tuple.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="Tuple.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
