@@ -4,22 +4,28 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 #include "../RayTracerLib/Tuple.h"
 #include "../RayTracerLib/Canvas.h"
 #include "../RayTracerLib/Matrix.h"
 #include "../RayTracerLib/Transformation.h"
+#include "../RayTracerLib/Sphere.h"
 
 #include "Elements.h"
 
 namespace rt = RayTracer;
 
 void projectile();
-void clock();
+void clockface();
+void sphere(float r_x, float r_y, float z_ang, size_t id);
+void spheres();
 
 int main()
 {
-  clock();
+  // TODO: organize examples
+  spheres();
 }
 
 void projectile() {
@@ -44,7 +50,7 @@ void projectile() {
   of << c;
 }
 
-void clock() {
+void clockface() {
   // Parameters to play with
   constexpr size_t CANVAS_SIZE = 300;
   constexpr float BORDER = 1.0f/5.0f;
@@ -75,4 +81,71 @@ void clock() {
 
   std::ofstream of("c:\\temp\\clock.ppm");
   of << c;
+}
+
+void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, size_t id) {
+  // Parameters to play with
+  constexpr size_t CANVAS_WIDTH = 100;
+  constexpr size_t CANVAS_HEIGHT = 100;
+
+  // World to canvas transform
+  // In conjunction with the camera location, that defines the viewport
+  auto w2c = rt::Transform::id().translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 0);
+  auto c2w = w2c.inverse();
+  const rt::Point CAMERA_LOCATION(0, 0, -100);
+
+  // Sphere's transform
+  const rt::Transform T = rt::Transform::id()
+    .scale(sphere_radius_x, sphere_radius_y, 1)
+    .rot_z(z_ang);
+
+  rt::Canvas c(CANVAS_WIDTH, CANVAS_HEIGHT);
+  rt::Sphere s(T);
+
+  for (size_t i = 0; i < CANVAS_WIDTH; ++i) {
+    for (size_t j = 0; j < CANVAS_HEIGHT; ++j) {
+      // Convert each canvas point to world space, and run a ray to that point
+      rt::Ray r(CAMERA_LOCATION, c2w * rt::Point(i, j, 0) - CAMERA_LOCATION);
+      auto h = rt::hit(s.intersect(r));
+      if (h) {
+        c.pixel(i, j) = rt::Color(1.0f, 1.0f, 1.0f);
+      }
+    }
+  }
+
+  std::stringstream strm;
+  strm << "c:\\temp\\sphere\\" << std::setfill('0') << std::setw(5) << id << ".ppm";
+  std::ofstream of(strm.str());
+  of << c;
+}
+
+void spheres() {
+  size_t w = 50, h = 50, idx = 0;
+  float z_ang = 0;
+
+  for (int i = 0; i < 10; ++i) {
+    w -= 2;
+    h -= 2;
+    sphere(w, h, 0, ++idx);
+  }
+
+  for (int i = 0; i < 10; ++i) {
+    w += 2;
+    sphere(w, h, 0, ++idx);
+  }
+
+  for (int i = 0; i < 10; ++i) {
+    z_ang += 3.14159f / 20;
+    sphere(w, h, z_ang, ++idx);
+  }
+
+  for (int i = 0; i < 10; ++i) {
+    h += 2;
+    sphere(w, h, z_ang, ++idx);
+  }
+
+  // Make a GIF:
+  //
+  // magick mogrify -format jpg *.ppm
+  // magick convert -delay 10 -loop 0 *.jpg sphere.gif
 }
