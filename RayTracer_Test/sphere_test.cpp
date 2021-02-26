@@ -50,13 +50,13 @@ TEST(TestSphere, TestSphereRayBehind) {
 
 TEST(TestSphere, TestSphereDefaultTransform) {
   Sphere s;
-  EXPECT_EQ(Transform::id(), s.transform);
+  EXPECT_EQ(Transform::id(), s.transform());
 }
 
 TEST(TestSphere, TestSphereCustomTransform) {
   Sphere s(Transform::id().translate(2, 3, 4));
-  EXPECT_EQ(Transform::id().translate(2, 3, 4), s.transform);
-  EXPECT_EQ(Transform::id().translate(2, 3, 4).inverse(), s.inverse);
+  EXPECT_EQ(Transform::id().translate(2, 3, 4), s.transform());
+  EXPECT_EQ(Transform::id().translate(2, 3, 4).inverse(), s.inverse());
 }
 
 TEST(TestSphere, TestScaledSphereIntersect) {
@@ -65,8 +65,8 @@ TEST(TestSphere, TestScaledSphereIntersect) {
 
   auto xs = s.intersect(r);
   EXPECT_EQ(2, xs.size());
-  EXPECT_TRUE(ApproxEqual(3, xs[0].t, epsilon));
-  EXPECT_TRUE(ApproxEqual(7, xs[1].t, epsilon));
+  EXPECT_TRUE(ApproxEqual(3, xs[0].time(), epsilon));
+  EXPECT_TRUE(ApproxEqual(7, xs[1].time(), epsilon));
 }
 
 TEST(TestSphere, TestTranslatedSphereIntersect) {

@@ -5,14 +5,18 @@
 #include "Tuple.h"
 #include "Sphere.h"
 
-bool RayTracer::operator==(const Intersection & lhs, const Intersection & rhs)
+bool RayTracer::Intersection::operator==(const Intersection & rhs) const
 {
-  return ApproxEqual(lhs.t, rhs.t, epsilon) && &lhs.s.get() == &rhs.s.get();
+  if (this == &rhs) {
+    return true;
+  }
+
+  return ApproxEqual(_t, rhs._t, epsilon) && &_s.get() == &rhs._s.get();
 }
 
-bool RayTracer::operator!=(const Intersection & lhs, const Intersection & rhs)
+bool RayTracer::Intersection::operator!=(const Intersection & rhs) const
 {
-  return !(lhs == rhs);
+  return !(*this == rhs);
 }
 
 std::optional<RayTracer::Intersection> RayTracer::hit(const std::vector<Intersection>& xs)
@@ -23,12 +27,12 @@ std::optional<RayTracer::Intersection> RayTracer::hit(const std::vector<Intersec
   std::vector<Intersection> non_neg;
   non_neg.reserve(xs.size());
   std::copy_if(xs.begin(), xs.end(), std::back_inserter(non_neg), [](const Intersection& i) {
-    return i.t >= 0;
+    return i.time() >= 0;
     });
   std::make_heap(non_neg.begin(), non_neg.end(), [](const Intersection& i1, const Intersection& i2) {
-    return i1.t > i2.t; });
+    return i1.time() > i2.time(); });
   if (non_neg.size() > 0) {
-    return std::optional<Intersection>(std::in_place, non_neg.front().t, non_neg.front().s);
+    return std::optional<Intersection>(std::in_place, non_neg.front().time(), non_neg.front().sphere());
   }
   else {
     return {};

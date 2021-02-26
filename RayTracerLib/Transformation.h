@@ -4,7 +4,8 @@
 
 namespace RayTracer {
 
-  struct Transform : public Matrix<4> {
+  class Transform : public Matrix<4> {
+  public:
     Transform(const Matrix<4>& m) : Matrix<4>(m) {}
 
     static Transform id();

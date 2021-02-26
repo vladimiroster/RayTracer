@@ -6,32 +6,50 @@
 #include "Tuple.h"
 
 namespace RayTracer {
-  struct Canvas {
-    size_t width = 0;
-    size_t height = 0;
-    Color *p = nullptr;
+  class Canvas {
+    friend std::ostream& operator<<(std::ostream& os, const Canvas& c);
 
+  private:
+    size_t _width = 0;
+    size_t _height = 0;
+    Color *_canvas = nullptr;
+
+  public:
     Canvas(size_t w, size_t h) :
-      width(w), height(h) {
-      p = new Color[width * height];
+      _width(w), _height(h) {
+      _canvas = new Color[_width * _height];
     }
 
     ~Canvas() {
-      if (p) {
-        delete[] p;
+      if (_canvas) {
+        delete[] _canvas;
       }
     }
 
+    size_t width() const {
+      return _width;
+    }
+
+    size_t height() const {
+      return _height;
+    }
+
     size_t size() const {
-      return width * height;
+      return _width * _height;
     }
 
     Color& pixel(size_t i, size_t j) {
-      return p[i + width * j];
+      return _canvas[i + _width * j];
     }
+
+    const Color& pixel(size_t i, size_t j) const {
+      return _canvas[i + _width * j];
+    }
+
+    bool isValidCoordinate(Point p) const;
   };
 
-  bool isValidCoordinate(const Canvas& c, Point p);
+  
   int toOutputColor(float c);
   std::ostream& operator<<(std::ostream& os, const Canvas& c);
 

@@ -8,10 +8,10 @@ using namespace RayTracer;
 
 TEST(TestCanvas, TestCanvasCreate) {
   Canvas c(10,20);
-  EXPECT_EQ(10, c.width);
-  EXPECT_EQ(20, c.height);
-  for (int i = 0; i < c.width; ++i) {
-    for (int j = 0; j < c.height; ++j) {
+  EXPECT_EQ(10, c.width());
+  EXPECT_EQ(20, c.height());
+  for (int i = 0; i < c.width(); ++i) {
+    for (int j = 0; j < c.height(); ++j) {
       EXPECT_EQ(Color(0.0f, 0.0f, 0.0f), c.pixel(i,j));
     }
   }

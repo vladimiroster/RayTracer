@@ -9,8 +9,8 @@ TEST(TestIntersection, TestIntersectionCreate) {
   Sphere s;
   Intersection i(3.5f, s);
 
-  EXPECT_EQ(3.5f, i.t);
-  EXPECT_EQ(&s, &(i.s.get()));
+  EXPECT_EQ(3.5f, i.time());
+  EXPECT_EQ(&s, &(i.sphere()));
 }
 
 TEST(TestIntersection, TestHitAllPositive) {

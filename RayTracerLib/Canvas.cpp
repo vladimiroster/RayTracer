@@ -1,11 +1,11 @@
 #include "Canvas.h"
 
 namespace RayTracer {
-  bool isValidCoordinate(const Canvas& c, Point p) {
+  bool Canvas::isValidCoordinate(Point p) const {
     return p.x >= 0 &&
-      p.x <= c.width &&
+      p.x <= _width &&
       p.y >= 0 &&
-      p.y <= c.height;
+      p.y <= _height;
   }
 
   int toOutputColor(float c) {
@@ -16,11 +16,11 @@ namespace RayTracer {
 
   std::ostream& operator<<(std::ostream& os, const Canvas& c) {
     os << "P3" << "\n";
-    os << c.width << " " << c.height << "\n";
+    os << c._width << " " << c._height << "\n";
     os << "255" << "\n";
-    for (size_t i = 0; i < c.width * c.height; ++i) {
-      os << toOutputColor(c.p[i].x) << " " << toOutputColor(c.p[i].y) << " " << toOutputColor(c.p[i].z);
-      if (i % c.width == c.width - 1) {
+    for (size_t i = 0; i < c._width * c._height; ++i) {
+      os << toOutputColor(c._canvas[i].x) << " " << toOutputColor(c._canvas[i].y) << " " << toOutputColor(c._canvas[i].z);
+      if (i % c._width == c._width - 1) {
         os << "\n";
       }
       else {

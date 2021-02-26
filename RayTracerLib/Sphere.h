@@ -9,12 +9,21 @@
 
 namespace RayTracer {
 
-  struct Sphere {
-    // TODO: class invariant starts being non-trivial, switch to encapsulated mode soon
-    Transform transform;
-    Transform inverse;
+  class Sphere {
+  private:
+    Transform _transform;
+    Transform _inverse;
 
-    Sphere(Transform t = Transform::id()) : transform(t), inverse(t.inverse()) {}
+  public:
+    Sphere(Transform t = Transform::id()) : _transform(t), _inverse(t.inverse()) {}
+
+    const Transform &transform() const {
+      return _transform;
+    }
+
+    const Transform &inverse() const {
+      return _inverse;
+    }
 
     std::vector<Intersection> intersect(Ray r);
   };

@@ -9,8 +9,8 @@ TEST(TestRay, TestRayCreate) {
   Point p(1, 2, 3);
   Vector v(4, 5, 6);
   Ray r(p, v);
-  EXPECT_EQ(p, r.origin);
-  EXPECT_EQ(v, r.direction);
+  EXPECT_EQ(p, r.origin());
+  EXPECT_EQ(v, r.direction());
 }
 
 TEST(TestRay, TestRayPosition) {
@@ -25,14 +25,14 @@ TEST(TestRay, TestRayTranslate) {
   Ray r(Point(1, 2, 3), Vector(0, 1, 0));
   auto m = Transform::id().translate(3, 4, 5);
   auto r2 = m * r;
-  EXPECT_EQ(Point(4, 6, 8), r2.origin);
-  EXPECT_EQ(Vector(0, 1, 0), r2.direction);
+  EXPECT_EQ(Point(4, 6, 8), r2.origin());
+  EXPECT_EQ(Vector(0, 1, 0), r2.direction());
 }
 
 TEST(TestRay, TestRayScale) {
   Ray r(Point(1, 2, 3), Vector(0, 1, 0));
   auto m = Transform::id().scale(2, 3, 4);
   auto r2 = m * r;
-  EXPECT_EQ(Point(2, 6, 12), r2.origin);
-  EXPECT_EQ(Vector(0, 3, 0), r2.direction);
+  EXPECT_EQ(Point(2, 6, 12), r2.origin());
+  EXPECT_EQ(Vector(0, 3, 0), r2.direction());
 }

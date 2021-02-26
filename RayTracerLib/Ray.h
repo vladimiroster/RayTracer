@@ -5,11 +5,22 @@
 
 namespace RayTracer {
   
-  struct Ray {
-    Point origin;
-    Vector direction;
+  class Ray {
+  private:
+    Point _o;
+    Vector _d;
 
-    Ray(Point p, Vector v) : origin(p), direction(v) {}
+  public:
+    Ray(Point p, Vector v) : _o(p), _d(v) {}
+
+    const Point& origin() const {
+      return _o;
+    }
+
+    const Vector& direction() const {
+      return _d;
+    }
+
     Point position(float t);
   };
 

@@ -7,10 +7,10 @@ TEST(TestMatrix, TestMatrix2x2Create) {
   Matrix<2> m({-3, 5,
     1, -2});
 
-  EXPECT_TRUE(ApproxEqual(m.data[0][0], -3.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][1], 5.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][0], 1.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][1], -2.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][0], -3.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][1], 5.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][0], 1.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][1], -2.0f, epsilon));
 }
 
 TEST(TestMatrix, TestMatrix3x3Create) {
@@ -18,15 +18,15 @@ TEST(TestMatrix, TestMatrix3x3Create) {
     1, -2, -7,
     0, 1, 1});
 
-  EXPECT_TRUE(ApproxEqual(m.data[0][0], -3.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][1], 5.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][2], 0.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][0], 1.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][1], -2.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][2], -7.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][0], 0.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][1], 1.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][2], 1.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][0], -3.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][1], 5.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][2], 0.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][0], 1.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][1], -2.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][2], -7.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][0], 0.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][1], 1.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][2], 1.0f, epsilon));
 }
 
 TEST(TestMatrix, TestMatrix4x4Create) {
@@ -35,22 +35,22 @@ TEST(TestMatrix, TestMatrix4x4Create) {
     9, 10, 11, 12,
     13.5f, 14.5f, 15.5f, 16.5f});
 
-  EXPECT_TRUE(ApproxEqual(m.data[0][0], 1.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][1], 2.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][2], 3.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[0][3], 4.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][0], 5.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][1], 6.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][2], 7.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[1][3], 8.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][0], 9.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][1], 10.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][2], 11.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[2][3], 12.0f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[3][0], 13.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[3][1], 14.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[3][2], 15.5f, epsilon));
-  EXPECT_TRUE(ApproxEqual(m.data[3][3], 16.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][0], 1.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][1], 2.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][2], 3.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[0][3], 4.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][0], 5.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][1], 6.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][2], 7.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[1][3], 8.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][0], 9.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][1], 10.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][2], 11.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[2][3], 12.0f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[3][0], 13.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[3][1], 14.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[3][2], 15.5f, epsilon));
+  EXPECT_TRUE(ApproxEqual(m[3][3], 16.5f, epsilon));
 }
 
 TEST(TestMatrix, TestMatrix2x2EqIdentical) {

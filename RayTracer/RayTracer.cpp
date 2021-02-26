@@ -36,8 +36,8 @@ void projectile() {
   int time = 0;
   while (p.position.y > 0) {
     p = tick(env, p);
-    if (rt::isValidCoordinate(c, p.position)) {
-      c.pixel(static_cast<size_t>(p.position.x), static_cast<size_t>(c.height - p.position.y)) = rt::Color(1.0f, 1.0f, 1.0f);
+    if (c.isValidCoordinate(p.position)) {
+      c.pixel(static_cast<size_t>(p.position.x), static_cast<size_t>(c.height() - p.position.y)) = rt::Color(1.0f, 1.0f, 1.0f);
     }
     else {
       std::cout << "Not plotting: ";
@@ -105,7 +105,7 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, size_t id
   for (size_t i = 0; i < CANVAS_WIDTH; ++i) {
     for (size_t j = 0; j < CANVAS_HEIGHT; ++j) {
       // Convert each canvas point to world space, and run a ray to that point
-      rt::Ray r(CAMERA_LOCATION, c2w * rt::Point(i, j, 0) - CAMERA_LOCATION);
+      rt::Ray r(CAMERA_LOCATION, c2w * rt::Point(static_cast<float>(i), static_cast<float>(j), 0) - CAMERA_LOCATION);
       auto h = rt::hit(s.intersect(r));
       if (h) {
         c.pixel(i, j) = rt::Color(1.0f, 1.0f, 1.0f);
@@ -126,22 +126,22 @@ void spheres() {
   for (int i = 0; i < 10; ++i) {
     w -= 2;
     h -= 2;
-    sphere(w, h, 0, ++idx);
+    sphere(static_cast<float>(w), static_cast<float>(h), 0, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     w += 2;
-    sphere(w, h, 0, ++idx);
+    sphere(static_cast<float>(w), static_cast<float>(h), 0, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     z_ang += 3.14159f / 20;
-    sphere(w, h, z_ang, ++idx);
+    sphere(static_cast<float>(w), static_cast<float>(h), z_ang, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     h += 2;
-    sphere(w, h, z_ang, ++idx);
+    sphere(static_cast<float>(w), static_cast<float>(h), z_ang, ++idx);
   }
 
   // Make a GIF:

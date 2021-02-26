@@ -6,24 +6,26 @@
 namespace RayTracer {
 
   template<size_t n>
-  struct Matrix {
-    std::array<std::array<float, n>, n> data;
+  class Matrix {
+  private:
+    std::array<std::array<float, n>, n> _data;
 
+  public:
     Matrix() = default;
-    Matrix(std::array<std::array<float, n>, n> init) : data(init) {}
+    Matrix(std::array<std::array<float, n>, n> init) : _data(init) {}
 
     std::array<float, n>& operator[](size_t row) {
-      return data[row];
+      return _data[row];
     }
 
     const std::array<float, n>& operator[](size_t row) const {
-      return data[row];
+      return _data[row];
     }
 
     std::array<float, n> col(size_t c) const {
       std::array<float, n> arr;
       for (size_t i = 0; i < n; ++i) {
-        arr[i] = data[i][c];
+        arr[i] = _data[i][c];
       }
       return arr;
     }
@@ -48,7 +50,7 @@ namespace RayTracer {
     // TODO: verify optimizer unrolls the loop
     for (size_t i = 0; i < n; ++i) {
       for (size_t j = 0; j < n; ++j) {
-        if (!ApproxEqual(data[i][j], other[i][j], epsilon)) {
+        if (!ApproxEqual(_data[i][j], other[i][j], epsilon)) {
           return false;
         }
       }
@@ -83,7 +85,7 @@ namespace RayTracer {
 
     for (size_t i = 0; i < n; ++i) {
       for (size_t j = 0; j < n; ++j) {
-        result[i][j] = data[j][i];
+        result[i][j] = _data[j][i];
       }
     }
     return result;
@@ -102,7 +104,7 @@ namespace RayTracer {
         if (j == col) {
           continue;
         }
-        result[new_i][new_j] = data[i][j];
+        result[new_i][new_j] = _data[i][j];
         ++new_j;
       }
       ++new_i;
@@ -128,14 +130,14 @@ namespace RayTracer {
   {
     float det = 0;
     for (size_t i = 0; i < n; ++i) {
-      det += data[0][i] * cofactor(0, i);
+      det += _data[0][i] * cofactor(0, i);
     }
     return det;
   }
 
   template<>
   inline float Matrix<2>::det() const {
-    return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+    return _data[0][0] * _data[1][1] - _data[0][1] * _data[1][0];
   }
 
 
