@@ -38,7 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="canvas_test.cpp" />
+    <ClCompile Include="intersection_test.cpp" />
     <ClCompile Include="matrix_test.cpp" />
+    <ClCompile Include="ray_test.cpp" />
+    <ClCompile Include="sphere_test.cpp" />
     <ClCompile Include="transformation_test.cpp" />
     <ClCompile Include="tuple_test.cpp" />
     <ClCompile Include="pch.cpp">
