@@ -158,3 +158,17 @@ TEST(TestTuple, TestColorMulColor) {
   Color c2(0.9f, 1.0f, 0.1f);
   EXPECT_EQ(Color(0.9f, 0.2f, 0.04f), c1 * c2);
 }
+
+TEST(TestTuple, TestReflect45) {
+  Vector v(1, -1, 0);
+  Vector n(0, 1, 0);
+  auto r = reflect(v, n);
+  EXPECT_EQ(Vector(1, 1, 0), r);
+}
+
+TEST(TestTuple, TestReflectSlanted) {
+  Vector v(0, -1, 0);
+  Vector n(sqrtf(2)/2.0f, sqrtf(2)/2.0f, 0);
+  auto r = reflect(v, n);
+  EXPECT_EQ(Vector(1, 0, 0), r);
+}

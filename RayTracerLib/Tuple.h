@@ -52,7 +52,11 @@ namespace RayTracer {
   struct Color : public Tuple {
     Color() : Tuple(0.0f, 0.0f, 0.0f, 0.0f) {}
     Color(float r, float g, float b) : Tuple(r, g, b, 0.0f) {}
+    Color(Tuple&& t) : Color(t.x, t.y, t.z) {}
   };
+
+  inline const Color black(0, 0, 0);
+  inline const Color white(1, 1, 1);
 
   bool operator==(const Tuple& lhs, const Tuple& rhs);
   bool operator!=(const Tuple& lhs, const Tuple& rhs);
@@ -68,5 +72,6 @@ namespace RayTracer {
   Vector cross(const Vector& lhs, const Vector& rhs);
   // Hadamard product (Schur product)
   Color operator*(const Color& lhs, const Color& rhs);
+  Vector reflect(const Vector& in, const Vector& normal);
 
 } // namespace RayTracer

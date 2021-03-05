@@ -1,11 +1,15 @@
 #include "Ray.h"
 
-RayTracer::Point RayTracer::Ray::position(float t)
-{
-  return _o + _d * t;
-}
+namespace RayTracer {
 
-RayTracer::Ray RayTracer::operator*(const Matrix<4>& M, const Ray & r)
-{
-  return Ray(M * r.origin(), M * r.direction());
-}
+  RayTracer::Point RayTracer::Ray::position(float t)
+  {
+    return _o + _d * t;
+  }
+
+  RayTracer::Ray RayTracer::operator*(const Matrix<4>& M, const Ray & r)
+  {
+    return Ray(M * r.origin(), M * r.direction());
+  }
+
+} // namespace RayTracer

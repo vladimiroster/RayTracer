@@ -72,4 +72,9 @@ namespace RayTracer {
   Color operator*(const Color& lhs, const Color& rhs) {
     return Color(lhs.x * rhs.x, lhs.y  * rhs.y, lhs.z * rhs.z);
   }
+
+  Vector reflect(const Vector & in, const Vector & normal)
+  {
+    return in - normal * 2 * dot(in, normal);
+  }
 } // namespace RayTracer

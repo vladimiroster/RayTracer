@@ -39,6 +39,8 @@
   <ItemGroup>
     <ClCompile Include="canvas_test.cpp" />
     <ClCompile Include="intersection_test.cpp" />
+    <ClCompile Include="lighting_test.cpp" />
+    <ClCompile Include="materials_test.cpp" />
     <ClCompile Include="matrix_test.cpp" />
     <ClCompile Include="ray_test.cpp" />
     <ClCompile Include="sphere_test.cpp" />
