@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -130,10 +130,12 @@
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="Materials.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Tuple.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
@@ -141,10 +143,12 @@
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="Materials.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="Tuple.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

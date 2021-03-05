@@ -4,7 +4,7 @@ namespace RayTracer {
 
   std::vector<Intersection> Sphere::intersect(Ray r)
   {
-    r = _inverse * r;
+    r = inverse() * r;
 
     // Note: sphere center is at world origin
     auto s2r = r.origin() - Point(0, 0, 0);
@@ -27,10 +27,10 @@ namespace RayTracer {
 
   Vector Sphere::normal(Point p) const
   {
-    auto obj_p = _inverse * p;
+    auto obj_p = inverse() * p;
     // TODO: add zero point as constant
     auto obj_n = obj_p - Point(0, 0, 0);
-    auto w_n = _inverse.transpose() * obj_n;
+    auto w_n = inverse().transpose() * obj_n;
     w_n.w = 0;
     return normalize(w_n);
   }

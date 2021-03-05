@@ -14,7 +14,7 @@ namespace RayTracer {
     return !(lhs == rhs);
   }
 
-  Color lighting(Material m, PointLight light, Point p, Vector eyev, Vector normalv)
+  Color lighting(Material m, Light light, Point p, Vector eyev, Vector normalv)
   {
     // Combine the surface color with the light's color
     auto effective_color = m.color * light.intensity;

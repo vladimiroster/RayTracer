@@ -20,7 +20,7 @@ namespace rt = RayTracer;
 
 void projectile();
 void clockface();
-void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Material material, rt::PointLight light, size_t id);
+void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Material material, rt::Light light, size_t id);
 void spheres();
 
 int main()
@@ -84,7 +84,7 @@ void clockface() {
   of << c;
 }
 
-void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Material material, rt::PointLight light, size_t id) {
+void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Material material, rt::Light light, size_t id) {
   // Parameters to play with
   constexpr size_t CANVAS_WIDTH = 100;
   constexpr size_t CANVAS_HEIGHT = 100;
@@ -111,9 +111,9 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Mater
       auto h = rt::hit(s.intersect(r));
       if (h) {
         auto point = r.position(h->time());
-        auto normal = h->sphere().normal(point);
+        auto normal = h->object().normal(point);
         rt::Vector eye = -r.direction();
-        c.pixel(i, j) = rt::lighting(h->sphere().material(), light, point, eye, normal);
+        c.pixel(i, j) = rt::lighting(h->object().material(), light, point, eye, normal);
       }
     }
   }
@@ -125,31 +125,35 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Mater
 }
 
 void spheres() {
-  // TODO: play around with light values
+  // TODO: play around with light and material values
   size_t w = 50, h = 50, idx = 0;
   float z_ang = 0;
   rt::Material m;
   m.color = rt::Color(1, 0.f, 1);
-  rt::PointLight light(rt::white, rt::Point(-10, 10, -10));
+  rt::Light light(rt::white, rt::Point(-10, 10, -10));
 
   for (int i = 0; i < 10; ++i) {
     w -= 2;
     h -= 2;
+    light.position.x += 2;
     sphere(static_cast<float>(w), static_cast<float>(h), 0, m, light, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     w += 2;
+    light.position.y += 2;
     sphere(static_cast<float>(w), static_cast<float>(h), 0, m, light, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     z_ang += 3.14159f / 20;
+    light.position.x -= 2;
     sphere(static_cast<float>(w), static_cast<float>(h), z_ang, m, light, ++idx);
   }
 
   for (int i = 0; i < 10; ++i) {
     h += 2;
+    light.position.y -= 2;
     sphere(static_cast<float>(w), static_cast<float>(h), z_ang, m, light, ++idx);
   }
 

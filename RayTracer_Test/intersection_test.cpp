@@ -10,7 +10,7 @@ TEST(TestIntersection, TestIntersectionCreate) {
   Intersection i(3.5f, s);
 
   EXPECT_EQ(3.5f, i.time());
-  EXPECT_EQ(&s, &(i.sphere()));
+  EXPECT_EQ(&s, &(i.object()));
 }
 
 TEST(TestIntersection, TestHitAllPositive) {

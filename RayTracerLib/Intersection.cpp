@@ -3,7 +3,7 @@
 #include <optional>
 
 #include "Tuple.h"
-#include "Sphere.h"
+#include "Object.h"
 
 namespace RayTracer {
 
@@ -13,7 +13,7 @@ namespace RayTracer {
       return true;
     }
 
-    return ApproxEqual(_t, rhs._t, epsilon) && &_s.get() == &rhs._s.get();
+    return ApproxEqual(_t, rhs._t, epsilon) && &_o.get() == &rhs._o.get();
   }
 
   bool Intersection::operator!=(const Intersection & rhs) const
@@ -34,7 +34,7 @@ namespace RayTracer {
     std::make_heap(non_neg.begin(), non_neg.end(), [](const Intersection& i1, const Intersection& i2) {
       return i1.time() > i2.time(); });
     if (non_neg.size() > 0) {
-      return std::optional<Intersection>(std::in_place, non_neg.front().time(), non_neg.front().sphere());
+      return std::optional<Intersection>(std::in_place, non_neg.front().time(), non_neg.front().object());
     }
     else {
       return {};

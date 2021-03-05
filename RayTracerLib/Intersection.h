@@ -5,23 +5,23 @@
 #include <functional>
 
 namespace RayTracer {
-  class Sphere;
+  class Object;
 
   class Intersection {
   private:
     float _t;
     // TODO: Handle scope problem. Maybe use weak pointer?
-    std::reference_wrapper<const Sphere> _s;
+    std::reference_wrapper<const Object> _o;
 
   public:
-    Intersection(float time, const Sphere& sph) : _t(time), _s(sph) {}
+    Intersection(float time, const Object& obj) : _t(time), _o(obj) {}
 
     float time() const {
       return _t;
     }
 
-    const Sphere& sphere() const {
-      return _s.get();
+    const Object& object() const {
+      return _o.get();
     }
 
     bool operator==(const Intersection& rhs) const;
