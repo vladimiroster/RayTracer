@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <chrono> 
 
 #include "../RayTracerLib/Tuple.h"
 #include "../RayTracerLib/Canvas.h"
@@ -26,7 +27,13 @@ void spheres();
 int main()
 {
   // TODO: organize examples
-  spheres();
+  //spheres();
+
+  rt::Material m;
+  m.color = rt::Color(1, 0.f, 1);
+  rt::Light light(rt::white, rt::Point(-10, 10, -10));
+
+  sphere(1500, 1500, 0, m, light, 1000);
 }
 
 void projectile() {
@@ -85,9 +92,11 @@ void clockface() {
 }
 
 void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Material material, rt::Light light, size_t id) {
+  auto start = std::chrono::high_resolution_clock::now(); 
+
   // Parameters to play with
-  constexpr size_t CANVAS_WIDTH = 100;
-  constexpr size_t CANVAS_HEIGHT = 100;
+  constexpr size_t CANVAS_WIDTH = 4096;
+  constexpr size_t CANVAS_HEIGHT = 4096;
 
   // World to canvas transform
   // In conjunction with the camera location, that defines the viewport
@@ -118,10 +127,18 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Mater
     }
   }
 
+  auto stop = std::chrono::high_resolution_clock::now(); 
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start); 
+  std::cout << duration.count() << std::endl; 
+
   std::stringstream strm;
   strm << "c:\\temp\\sphere\\" << std::setfill('0') << std::setw(5) << id << ".ppm";
   std::ofstream of(strm.str());
   of << c;
+
+  auto stop2 = std::chrono::high_resolution_clock::now(); 
+  auto duration2 = std::chrono::duration_cast<std::chrono::milliseconds>(stop2 - stop); 
+  std::cout << duration2.count() << std::endl; 
 }
 
 void spheres() {

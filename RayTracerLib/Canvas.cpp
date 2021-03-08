@@ -19,7 +19,11 @@ namespace RayTracer {
     os << c._width << " " << c._height << "\n";
     os << "255" << "\n";
     for (size_t i = 0; i < c._width * c._height; ++i) {
-      os << toOutputColor(c._canvas[i].x) << " " << toOutputColor(c._canvas[i].y) << " " << toOutputColor(c._canvas[i].z);
+      char buf[3 * 3 + 3]; // 3 ints, 3 digit max + 2 spaces and eol
+      sprintf_s(buf, "%d %d %d", toOutputColor(c._canvas[i].x), toOutputColor(c._canvas[i].y), toOutputColor(c._canvas[i].z));
+      os.write(buf, strlen(buf));
+      // This is 4x slower than the above implementation
+//      os << toOutputColor(c._canvas[i].x) << " " << toOutputColor(c._canvas[i].y) << " " << toOutputColor(c._canvas[i].z);
       if (i % c._width == c._width - 1) {
         os << "\n";
       }
