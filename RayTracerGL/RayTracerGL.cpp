@@ -2,6 +2,10 @@
 
 #include <chrono>
 using namespace std::chrono_literals;
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 
 #include "../RayTracerLib/World.h"
 #include "../RayTracerLib/Sphere.h"
@@ -10,13 +14,14 @@ using namespace std::chrono_literals;
 
 namespace rt = RayTracer;
 
-// TODO: find a better place for this (and design the GL app better in general)
+// TODO: find a better place for these (and design the GL app better in general)
 rt::Point FROM(0, 1.5f, -5);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
 auto res = rt::Camera::RES_720P;
 float FOV = 3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
+std::unique_ptr<rt::Canvas> canvas;
 
 void process_input(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -43,7 +48,20 @@ void process_input(GLFWwindow* window, int key, int scancode, int action, int mo
     case GLFW_KEY_HOME:
       UP = rt::Transform::id().rot_z(3.14159f / 4.0f) * UP;
       break;
-
+    case GLFW_KEY_Q:
+      glfwTerminate();
+      exit(0);
+      break;
+    case GLFW_KEY_S:
+      // Note: this needs to be last case because of c++ ctor issues
+      std::stringstream strm;
+      auto id = std::chrono::system_clock::now().time_since_epoch().count();
+      strm << "c:\\temp\\RayTracer\\rt" << std::setfill('0') << std::setw(10) << id << ".ppm";
+      std::cout << "Writing frame " << strm.str() << '\n';
+      std::ofstream of(strm.str());
+      of << *canvas;
+      std::cout << "Done writing frame\n";
+      break;
     }
   }
 }
@@ -105,7 +123,6 @@ int main(int argc, char* argv[])
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
     
-    std::unique_ptr<rt::Canvas> canvas;
     {
       auto profile = p.profile("Render frame");
       // TODO: add "move" API to camera
