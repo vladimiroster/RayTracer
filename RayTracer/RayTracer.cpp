@@ -53,7 +53,7 @@ int main()
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
-  rt::Camera cam(rt::Camera::RES_720P, 1.047196666666667f /* pi/3 */, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
+  rt::Camera cam(rt::Camera::RES_4K, 1.047196666666667f /* pi/3 */, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
   auto canvas = cam.render(w);
   std::ofstream of("c:\\temp\\world.ppm");
   of << canvas;

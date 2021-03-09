@@ -12,9 +12,12 @@ namespace RayTracer {
   private:
     size_t _width = 0;
     size_t _height = 0;
-    Color *_canvas = nullptr;
+    //Color *_canvas = nullptr;
 
   public:
+    Color *_canvas = nullptr;
+
+
     Canvas(size_t w, size_t h) :
       _width(w), _height(h) {
       _canvas = new Color[_width * _height];

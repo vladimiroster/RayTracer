@@ -39,5 +39,5 @@ namespace RayTracer {
     std::ostream& _os;
   };
 
-  inline const Profiler profiler(true, std::cerr);
+  inline const Profiler profiler(false, std::cerr);
 } // namespace RayTracer
