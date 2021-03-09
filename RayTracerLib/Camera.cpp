@@ -2,7 +2,7 @@
 #include "Profiler.h"
 
 namespace RayTracer {
-  Camera::Camera(size_t hsize, size_t vsize, float fov, Transform view) : _hsize(hsize), _vsize(vsize), _fov(fov), _view(view), _inverse(view.inverse())
+  Camera::Camera(std::pair<size_t, size_t> resolution, float fov, Transform view) : _hsize(resolution.first), _vsize(resolution.second), _fov(fov), _view(view), _inverse(view.inverse())
   {
     auto half_view = tanf(fov / 2.0f);
     float aspect = static_cast<float>(_hsize) / _vsize;

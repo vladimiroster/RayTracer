@@ -16,8 +16,7 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-int HSIZE = 320;
-int VSIZE = 280;
+std::pair<size_t, size_t> RES = rt::Camera::RES_640X480;
 float FOV = 1.047196666666667f /* pi/3 */;
 float ZOOM_DELTA = 0.1;
 rt::Point FROM(0, 1.5f, -5);
@@ -112,7 +111,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, HSIZE, VSIZE, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, RES.first, RES.second, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -246,13 +245,13 @@ void DrawImage(HDC hdc)
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
-  rt::Camera cam(HSIZE, VSIZE, FOV, rt::Transform::id().view(FROM, TO, UP));
+  rt::Camera cam(RES, FOV, rt::Transform::id().view(FROM, TO, UP));
 
   auto canvas = cam.render(w);
 
   // Note: i tried making the render loop here directly, was as slow. Probably better just to switch to opengl
-  for (int x = 0; x < HSIZE; ++x) {
-    for (int y = 0; y < VSIZE; ++y) {
+  for (int x = 0; x < RES.first; ++x) {
+    for (int y = 0; y < RES.second; ++y) {
       SetPixel(hdc, x, y,  RGB( rt::toOutputColor(canvas.pixel(x, y).x), rt::toOutputColor(canvas.pixel(x, y).y), rt::toOutputColor(canvas.pixel(x, y).z)));
     }
   }

@@ -42,24 +42,18 @@ int main()
   auto plane_scale = rt::Transform::id().scale(10, 0.1f, 10);
   rt::Material floor_mat(rt::Color(1, 0.9f, 0.9f), 0.1f, 0.9f, 0, 0);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(plane_scale, floor_mat));
-  //  rt::Sphere floor(plane_scale, floor_mat);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
-  //rt::Sphere left_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
-  //rt::Sphere right_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
   rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
-  //rt::Sphere middle(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat);
   rt::Material right_mat(rt::Color(0.5f, 1, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat));
-  //rt::Sphere right(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat);
   rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
-  //rt::Sphere left(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat);
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
-  rt::Camera cam(640, 480, 1.047196666666667f /* pi/3 */, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
+  rt::Camera cam(rt::Camera::RES_720P, 1.047196666666667f /* pi/3 */, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
   auto canvas = cam.render(w);
   std::ofstream of("c:\\temp\\world.ppm");
   of << canvas;
