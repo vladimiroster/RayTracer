@@ -21,6 +21,11 @@ namespace RayTracer {
     return !(*this == rhs);
   }
 
+  Intersection::Computation Intersection::precompute(const Ray& r) const {
+    auto p = r.position(_t);
+    return Computation(_t, _o, p, -r.direction(), _o.get().normal(p));
+  }
+
   std::optional<Intersection> hit(const std::vector<Intersection>& xs)
   {
     // TODO: "intersections" can be an object that calculates the heap when new intersections are added.
@@ -38,6 +43,18 @@ namespace RayTracer {
     }
     else {
       return {};
+    }
+  }
+
+  Intersection::Computation::Computation(float t, const Object & obj, Point p, Vector eye, Vector normal) :
+  time(t), object(obj), point(p), eyev(eye), normalv(normal) 
+  {
+    if (dot(normalv, eyev) < 0) {
+      inside = true;
+      normalv = -normalv;
+    }
+    else {
+      inside = false;
     }
   }
 

@@ -2,7 +2,7 @@
 
 namespace RayTracer {
 
-  RayTracer::Point RayTracer::Ray::position(float t)
+  RayTracer::Point RayTracer::Ray::position(float t) const
   {
     return _o + _d * t;
   }

@@ -28,6 +28,12 @@ namespace RayTracer {
 
     static std::unique_ptr<World> default_world();
 
+    std::vector<Intersection> intersect(Ray r) const;
+
+    Color shade_hit(Intersection::Computation comps) const;
+
+    Color color_at(const Ray& r) const;
+
   private:
     std::vector<std::shared_ptr<Object>> _objects;
     std::vector<std::shared_ptr<Light>> _lights;

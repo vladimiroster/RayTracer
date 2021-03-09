@@ -4,6 +4,9 @@
 #include <optional>
 #include <functional>
 
+#include "Tuple.h"
+#include "Ray.h"
+
 namespace RayTracer {
   class Object;
 
@@ -23,6 +26,19 @@ namespace RayTracer {
     const Object& object() const {
       return _o.get();
     }
+
+    struct Computation {
+      float time;
+      std::reference_wrapper<const Object> object;
+      Point point;
+      Vector eyev;
+      Vector normalv;
+      bool inside;
+
+      Computation(float t, const Object& obj, Point p, Vector eye, Vector normal);
+    };
+
+    Computation precompute(const Ray& r) const;
 
     bool operator==(const Intersection& rhs) const;
     bool operator!=(const Intersection& rhs) const;

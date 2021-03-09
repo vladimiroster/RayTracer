@@ -50,3 +50,35 @@ TEST(TestIntersection, TestHitLowestNonNeg) {
   auto i = hit(xs);
   EXPECT_EQ(i4, i);
 }
+
+TEST(TestIntersection, TestPrecompute) {
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Sphere s;
+  Intersection i(4, s);
+  auto comps = i.precompute(r);
+  EXPECT_EQ(i.time(), comps.time);
+  EXPECT_EQ(i.object(), comps.object);
+  EXPECT_EQ(Point(0, 0, -1), comps.point);
+  EXPECT_EQ(Vector(0, 0, -1), comps.eyev);
+  EXPECT_EQ(Vector(0, 0, -1), comps.normalv);
+}
+
+TEST(TestIntersection, TestIntersectOutside) {
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Sphere shape;
+  Intersection i(4, shape);
+  auto comps = i.precompute(r);
+  ASSERT_EQ(false, comps.inside);
+}
+
+TEST(TestIntersection, TestIntersectInside) {
+  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+  Sphere shape;
+  Intersection i(1, shape);
+  auto comps = i.precompute(r);
+  EXPECT_EQ(Point(0, 0, 1), comps.point);
+  EXPECT_EQ(Vector(0, 0, -1), comps.eyev);
+  EXPECT_EQ(true, comps.inside);
+  // Normal inverted because the intersection is inside the object
+  EXPECT_EQ(Vector(0, 0, -1), comps.normalv);
+}

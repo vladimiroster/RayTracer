@@ -21,7 +21,7 @@ namespace RayTracer {
       return _d;
     }
 
-    Point position(float t);
+    Point position(float t) const;
   };
 
   Ray operator*(const Matrix<4>& M, const Ray& r);
