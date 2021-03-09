@@ -16,6 +16,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayTracerLib", "RayTracerLib\RayTracerLib.vcxproj", "{18E0F267-9998-4866-8321-1C09B7545E60}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RayTracerGui", "RayTracerGui\RayTracerGui.vcxproj", "{43444A4A-1129-4EC1-B2F1-0ECE7E2C532E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{18E0F267-9998-4866-8321-1C09B7545E60} = {18E0F267-9998-4866-8321-1C09B7545E60}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

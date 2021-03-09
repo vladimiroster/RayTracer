@@ -4,18 +4,27 @@
 #include "framework.h"
 #include "RayTracerGui.h"
 
+#include "..\RayTracerLib\World.h"
+#include "..\RayTracerLib\Sphere.h"
+#include "..\RayTracerLib\Camera.h"
+
 #define MAX_LOADSTRING 100
 
+namespace rt = RayTracer;
 // Global Variables:
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+int HSIZE = 1920;
+int VSIZE = 1080;
+float FOV = 1.047196666666667f /* pi/3 */;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+void DrawImage(HDC);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -98,7 +107,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, HSIZE, VSIZE, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -146,12 +155,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            for (int i = 0; i < 100; ++i) {
-              for (int j = 0; j < 100; ++j) {
-                SetPixel( hdc, i, j, RGB( 0, 0xFF, 0 ) );
-              }
-            }
+            DrawImage(hdc);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -182,4 +186,40 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+void DrawImage(HDC hdc)
+{
+  rt::World w;
+
+  auto plane_scale = rt::Transform::id().scale(10, 0.1f, 10);
+  rt::Material floor_mat(rt::Color(1, 0.9f, 0.9f), 0.1f, 0.9f, 0, 0);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(plane_scale, floor_mat));
+//  rt::Sphere floor(plane_scale, floor_mat);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
+  //rt::Sphere left_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
+  //rt::Sphere right_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
+  rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
+  //rt::Sphere middle(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat);
+  rt::Material right_mat(rt::Color(0.5f, 1, 0.1f), 0.1f, 0.7f, 0.3f, 200);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat));
+  //rt::Sphere right(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat);
+  rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
+  //rt::Sphere left(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat);
+
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+
+  rt::Camera cam(HSIZE, VSIZE, FOV, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
+
+  auto canvas = cam.render(w);
+
+  // Note: i tried making the render loop here directly, was as slow. Probably better just to switch to opengl
+  for (int x = 0; x < HSIZE; ++x) {
+    for (int y = 0; y < VSIZE; ++y) {
+      SetPixel(hdc, x, y,  RGB( rt::toOutputColor(canvas.pixel(x, y).x), rt::toOutputColor(canvas.pixel(x, y).y), rt::toOutputColor(canvas.pixel(x, y).z)));
+    }
+  }
 }
