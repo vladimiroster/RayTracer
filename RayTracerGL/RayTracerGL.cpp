@@ -10,10 +10,46 @@ using namespace std::chrono_literals;
 
 namespace rt = RayTracer;
 
-int main(void)
-{
-  auto res = rt::Camera::RES_720P;
+// TODO: find a better place for this (and design the GL app better in general)
+rt::Point FROM(0, 1.5f, -5);
+rt::Point TO(0, 1, 0);
+rt::Vector UP(0, 1, 0);
+auto res = rt::Camera::RES_720P;
+float FOV = 3.14159f / 3.0f;
+float MOVE_DELTA = 0.1f;
 
+void process_input(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  if (action == GLFW_PRESS) {
+    switch (key) {
+    case GLFW_KEY_KP_SUBTRACT:
+      FOV += MOVE_DELTA;
+      break;
+    case GLFW_KEY_KP_ADD:
+      FOV -= MOVE_DELTA;
+      break;
+    case GLFW_KEY_LEFT:
+      FROM = rt::Transform::id().rot_y(MOVE_DELTA) * FROM;
+      break;
+    case GLFW_KEY_RIGHT:
+      FROM = rt::Transform::id().rot_y(-MOVE_DELTA) * FROM;
+      break;
+    case GLFW_KEY_UP:
+      FROM = rt::Transform::id().rot_x(MOVE_DELTA) * FROM;
+      break;
+    case GLFW_KEY_DOWN:
+      FROM = rt::Transform::id().rot_x(-MOVE_DELTA) * FROM;
+      break;
+    case GLFW_KEY_HOME:
+      UP = rt::Transform::id().rot_z(3.14159f / 4.0f) * UP;
+      break;
+
+    }
+  }
+}
+
+int main(int argc, char* argv[])
+{
   GLFWwindow* window;
 
   /* Initialize the library */
@@ -35,6 +71,8 @@ int main(void)
   glRasterPos2f(-1,1);
   glPixelZoom( 1, -1 );
 
+  // Setup key input
+  glfwSetKeyCallback(window, process_input);
 
   // Setup the world
   rt::World w;
@@ -53,11 +91,6 @@ int main(void)
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
-  rt::Point FROM(0, 1.5f, -5);
-  rt::Point TO(0, 1, 0);
-  rt::Vector UP(0, 1, 0);
-
-  rt::Camera cam(res, 3.14159f / 3.0f, rt::Transform::id().view(FROM, TO, UP));
   rt::Profiler p(true);
 
   size_t frame_num = 0;
@@ -75,6 +108,8 @@ int main(void)
     std::unique_ptr<rt::Canvas> canvas;
     {
       auto profile = p.profile("Render frame");
+      // TODO: add "move" API to camera
+      rt::Camera cam(res, FOV, rt::Transform::id().view(FROM, TO, UP));
       canvas = std::make_unique<rt::Canvas>(std::move(cam.render(w)));
     }
     
