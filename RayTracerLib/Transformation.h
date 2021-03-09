@@ -9,13 +9,14 @@ namespace RayTracer {
     Transform(const Matrix<4>& m) : Matrix<4>(m) {}
 
     static Transform id();
-    Transform translate(float x, float y, float z);
-    Transform scale(float x, float y, float z);
+    Transform translate(float x, float y, float z) const;
+    Transform scale(float x, float y, float z) const;
     // TODO: add arbitrary quaternion rotations
-    Transform rot_x(float r);
-    Transform rot_y(float r);
-    Transform rot_z(float r);
-    Transform shear(float xy, float xz, float yx, float yz, float zx, float zy);
+    Transform rot_x(float r) const;
+    Transform rot_y(float r) const;
+    Transform rot_z(float r) const;
+    Transform shear(float xy, float xz, float yx, float yz, float zx, float zy) const;
+    Transform view(Point from, Point to, Vector up) const;
   };
 
 } // namespace RayTracer
