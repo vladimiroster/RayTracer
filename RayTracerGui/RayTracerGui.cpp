@@ -15,9 +15,14 @@ namespace rt = RayTracer;
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
-int HSIZE = 1920;
-int VSIZE = 1080;
+
+int HSIZE = 320;
+int VSIZE = 280;
 float FOV = 1.047196666666667f /* pi/3 */;
+float ZOOM_DELTA = 0.1;
+rt::Point FROM(0, 1.5f, -5);
+rt::Point TO(0, 1, 0);
+rt::Vector UP(0, 1, 0);
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -159,6 +164,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_KEYDOWN:
+      switch (wParam)
+      {
+      case VK_ADD:
+        FOV -= ZOOM_DELTA;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+      case VK_SUBTRACT:
+        FOV += ZOOM_DELTA;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+      case VK_LEFT:
+        MessageBox(NULL, L"Test", L"left button was pressed", NULL);
+        break;
+      case VK_RIGHT:
+        MessageBox(NULL, L"Test", L"right button was pressed", NULL);
+        break;
+      case VK_UP:
+        MessageBox(NULL, L"Test", L"up button was pressed", NULL);
+        break;
+      case VK_DOWN:
+        MessageBox(NULL, L"Test", L"down button was pressed", NULL);
+        break;
+      case VK_HOME:
+        UP = rt::Transform::id().rot_z(3.14159f / 4.0f) * UP;
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+      }
+      break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -212,7 +246,7 @@ void DrawImage(HDC hdc)
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
-  rt::Camera cam(HSIZE, VSIZE, FOV, rt::Transform::id().view(rt::Point(0, 1.5f, -5), rt::Point(0, 1, 0), rt::Vector(0, 1, 0)));
+  rt::Camera cam(HSIZE, VSIZE, FOV, rt::Transform::id().view(FROM, TO, UP));
 
   auto canvas = cam.render(w);
 
