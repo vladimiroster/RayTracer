@@ -1,5 +1,7 @@
 #include "Canvas.h"
 
+#include "Profiler.h"
+
 namespace RayTracer {
   bool Canvas::isValidCoordinate(Point p) const {
     return p.x >= 0 &&
@@ -15,6 +17,8 @@ namespace RayTracer {
   }
 
   std::ostream& operator<<(std::ostream& os, const Canvas& c) {
+    auto profile = profiler.profile(__FUNCDNAME__);
+
     os << "P3" << "\n";
     os << c._width << " " << c._height << "\n";
     os << "255" << "\n";
