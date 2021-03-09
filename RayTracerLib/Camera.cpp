@@ -42,7 +42,9 @@ namespace RayTracer {
 
     Canvas c(_hsize, _vsize);
 
-    for (size_t x = 0; x < _hsize; ++x) {
+    // MS version of OpenMP still requires the loop variable to be signed
+    #pragma omp parallel for
+    for (long long x = 0; x < _hsize; ++x) {
       for (size_t y = 0; y < _vsize; ++y) {
         auto r = ray_for_pixel(x, y);
         auto color = w.color_at(r);

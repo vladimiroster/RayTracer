@@ -113,7 +113,8 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Mater
   rt::Sphere s(T);
   s.set_material(material);
 
-  for (size_t i = 0; i < CANVAS_WIDTH; ++i) {
+  #pragma omp parallel for
+  for (long long i = 0; i < CANVAS_WIDTH; ++i) {
     for (size_t j = 0; j < CANVAS_HEIGHT; ++j) {
       // Convert each canvas point to world space, and run a ray to that point
       rt::Ray r(CAMERA_LOCATION, normalize(c2w * rt::Point(static_cast<float>(i), static_cast<float>(j), 0) - CAMERA_LOCATION));
