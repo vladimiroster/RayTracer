@@ -18,7 +18,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 std::pair<size_t, size_t> RES = rt::Camera::RES_640X480;
 float FOV = 1.047196666666667f /* pi/3 */;
-float ZOOM_DELTA = 0.1;
+float MOVE_DELTA = 0.1;
 rt::Point FROM(0, 1.5f, -5);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
@@ -167,24 +167,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       switch (wParam)
       {
       case VK_ADD:
-        FOV -= ZOOM_DELTA;
+        FOV -= MOVE_DELTA;
         InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_SUBTRACT:
-        FOV += ZOOM_DELTA;
+        FOV += MOVE_DELTA;
         InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_LEFT:
-        MessageBox(NULL, L"Test", L"left button was pressed", NULL);
+        FROM = rt::Transform::id().rot_y(MOVE_DELTA) * FROM;
+        InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_RIGHT:
-        MessageBox(NULL, L"Test", L"right button was pressed", NULL);
+        FROM = rt::Transform::id().rot_y(-MOVE_DELTA) * FROM;
+        InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_UP:
-        MessageBox(NULL, L"Test", L"up button was pressed", NULL);
+        FROM = rt::Transform::id().rot_x(MOVE_DELTA) * FROM;
+        InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_DOWN:
-        MessageBox(NULL, L"Test", L"down button was pressed", NULL);
+        FROM = rt::Transform::id().rot_x(-MOVE_DELTA) * FROM;
+        InvalidateRect(hWnd, NULL, TRUE);
         break;
       case VK_HOME:
         UP = rt::Transform::id().rot_z(3.14159f / 4.0f) * UP;
@@ -228,20 +232,14 @@ void DrawImage(HDC hdc)
   auto plane_scale = rt::Transform::id().scale(10, 0.1f, 10);
   rt::Material floor_mat(rt::Color(1, 0.9f, 0.9f), 0.1f, 0.9f, 0, 0);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(plane_scale, floor_mat));
-//  rt::Sphere floor(plane_scale, floor_mat);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
-  //rt::Sphere left_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(-0.7853975f /* -pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat));
-  //rt::Sphere right_wall(rt::Transform::id().rot_x(1.570795f /* pi/2 */).rot_y(0.7853975f /* pi/4 */).translate(0, 0, 5) * plane_scale, floor_mat);
   rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
-  //rt::Sphere middle(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat);
   rt::Material right_mat(rt::Color(0.5f, 1, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat));
-  //rt::Sphere right(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f), right_mat);
   rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
-  //rt::Sphere left(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat);
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 
