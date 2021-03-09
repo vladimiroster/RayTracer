@@ -43,6 +43,7 @@
     <ClCompile Include="lighting_test.cpp" />
     <ClCompile Include="materials_test.cpp" />
     <ClCompile Include="matrix_test.cpp" />
+    <ClCompile Include="profiler_test.cpp" />
     <ClCompile Include="ray_test.cpp" />
     <ClCompile Include="sphere_test.cpp" />
     <ClCompile Include="transformation_test.cpp" />

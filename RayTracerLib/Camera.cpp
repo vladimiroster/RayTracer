@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Profiler.h"
 
 namespace RayTracer {
   Camera::Camera(size_t hsize, size_t vsize, float fov, Transform view) : _hsize(hsize), _vsize(vsize), _fov(fov), _view(view), _inverse(view.inverse())
@@ -37,6 +38,8 @@ namespace RayTracer {
 
   Canvas Camera::render(const World & w) const
   {
+    auto profile = profiler.profile(__FUNCDNAME__);
+
     Canvas c(_hsize, _vsize);
 
     for (size_t x = 0; x < _hsize; ++x) {
@@ -50,4 +53,4 @@ namespace RayTracer {
     return std::move(c);
   }
 
-}
+} // namespace RayTracer

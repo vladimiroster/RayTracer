@@ -44,4 +44,4 @@ namespace RayTracer {
     float _half_width;
     float _half_height;
   };
-}
+} // namespace RayTracer
