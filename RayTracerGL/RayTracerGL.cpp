@@ -1,4 +1,3 @@
-#define GLFW_DLL
 #include <GLFW/glfw3.h>
 
 #include "../RayTracerLib/World.h"
@@ -9,6 +8,8 @@ namespace rt = RayTracer;
 
 int main(void)
 {
+  auto res = rt::Camera::RES_720P;
+
   GLFWwindow* window;
 
   /* Initialize the library */
@@ -16,7 +17,7 @@ int main(void)
     return -1;
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 480, "Ray Tracer", NULL, NULL);
+  window = glfwCreateWindow(res.first, res.second, "Ray Tracer", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -52,13 +53,13 @@ int main(void)
     rt::Point TO(0, 1, 0);
     rt::Vector UP(0, 1, 0);
 
-    rt::Camera cam(std::make_pair(640, 480), 3.14159f / 3.0f, rt::Transform::id().view(FROM, TO, UP));
+    rt::Camera cam(res, 3.14159f / 3.0f, rt::Transform::id().view(FROM, TO, UP));
 
     auto canvas = cam.render(w);
 
     glRasterPos2f(-1,1);
     glPixelZoom( 1, -1 );
-    glDrawPixels(640, 480, GL_RGBA, GL_FLOAT, canvas._canvas);
+    glDrawPixels(res.first, res.second, GL_RGBA, GL_FLOAT, canvas.canvas());
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);

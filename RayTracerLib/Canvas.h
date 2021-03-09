@@ -12,12 +12,9 @@ namespace RayTracer {
   private:
     size_t _width = 0;
     size_t _height = 0;
-    //Color *_canvas = nullptr;
-
-  public:
     Color *_canvas = nullptr;
 
-
+  public:
     Canvas(size_t w, size_t h) :
       _width(w), _height(h) {
       _canvas = new Color[_width * _height];
@@ -56,6 +53,10 @@ namespace RayTracer {
 
     const Color& pixel(size_t i, size_t j) const {
       return _canvas[i + _width * j];
+    }
+
+    const Color* canvas() const {
+      return _canvas;
     }
 
     bool isValidCoordinate(Point p) const;
