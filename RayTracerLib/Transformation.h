@@ -6,6 +6,7 @@ namespace RayTracer {
 
   class Transform : public Matrix<4> {
   public:
+    Transform() : Transform(Transform::id()) {}
     Transform(const Matrix<4>& m) : Matrix<4>(m) {}
 
     static Transform id();

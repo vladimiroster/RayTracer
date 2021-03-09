@@ -20,9 +20,18 @@ namespace RayTracer {
       _canvas = new Color[_width * _height];
     }
 
+    Canvas(Canvas&& other) {
+      _width = other._width;
+      _height = other._height;
+      _canvas = other._canvas;
+      other._width = other._height = 0;
+      other._canvas = nullptr;
+    }
+
     ~Canvas() {
       if (_canvas) {
         delete[] _canvas;
+        _canvas = nullptr;
       }
     }
 
