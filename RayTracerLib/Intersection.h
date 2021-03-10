@@ -16,6 +16,8 @@ namespace RayTracer {
     // TODO: Handle scope problem. Maybe use weak pointer?
     std::reference_wrapper<const Object> _o;
 
+    static inline constexpr float SHADE_EPS = 0.001f;
+
   public:
     Intersection(float time, const Object& obj) : _t(time), _o(obj) {}
 
@@ -31,6 +33,7 @@ namespace RayTracer {
       float time;
       std::reference_wrapper<const Object> object;
       Point point;
+      Point over_point;
       Vector eyev;
       Vector normalv;
       bool inside;

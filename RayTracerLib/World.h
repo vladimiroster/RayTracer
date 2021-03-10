@@ -34,6 +34,8 @@ namespace RayTracer {
 
     Color color_at(const Ray& r) const;
 
+    bool is_shadowed(Point p) const;
+
   private:
     std::vector<std::shared_ptr<Object>> _objects;
     std::vector<std::shared_ptr<Light>> _lights;

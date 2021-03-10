@@ -20,5 +20,5 @@ namespace RayTracer {
   bool operator==(const Material& lhs, const Material& rhs);
   bool operator!=(const Material& lhs, const Material& rhs);
 
-  Color lighting(Material m, Light light, Point p, Vector eyev, Vector normalv);
+  Color lighting(Material m, Light light, Point p, Vector eyev, Vector normalv, bool in_shadow);
 } // namespace RayTracer

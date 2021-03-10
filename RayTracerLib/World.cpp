@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include "Sphere.h"
+#include "Ray.h"
 
 namespace RayTracer {
 
@@ -33,7 +34,7 @@ namespace RayTracer {
   Color World::shade_hit(Intersection::Computation comps) const
   {
     // TODO: support multiple light sources
-    return lighting(comps.object.get().material(), *_lights.front(), comps.point, comps.eyev, comps.normalv);
+    return lighting(comps.object.get().material(), *_lights.front(), comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
   }
 
   Color World::color_at(const Ray & r) const
@@ -46,6 +47,20 @@ namespace RayTracer {
     else {
       return black;
     }
+  }
+
+  bool World::is_shadowed(Point p) const
+  {
+    // TODO: multiple light sources
+    auto point_to_light = _lights.front()->position - p;
+    auto distance = magnitude(point_to_light);
+    Ray r(p, normalize(point_to_light));
+    auto xs = intersect(r);
+    auto h = hit(xs);
+    if (h && h->time() < distance) {
+      return true;
+    }
+    return false;
   }
 
 } //namespace RayTracer

@@ -90,3 +90,34 @@ TEST(TestWorld, TestColorBehindRay) {
   Ray r(Point(0, 0, 0.75f), Vector(0, 0, -1));
   ASSERT_EQ(inner->material().color, w->color_at(r));
 }
+
+TEST(TestWorld, TestNoShadowNothingColinearPointLight) {
+  auto w = World::default_world();
+  ASSERT_FALSE(w->is_shadowed(Point(0, 10, 0)));
+}
+
+TEST(TestWorld, TestShadowObjectBetweenPointLight) {
+  auto w = World::default_world();
+  ASSERT_TRUE(w->is_shadowed(Point(10, -10, 10)));
+}
+
+TEST(TestWorld, TestNoShadowObjectBehindLight) {
+  auto w = World::default_world();
+  ASSERT_FALSE(w->is_shadowed(Point(-20, 20, -20)));
+}
+
+TEST(TestWorld, TestNoShadowObjectBehindPoint) {
+  auto w = World::default_world();
+  ASSERT_FALSE(w->is_shadowed(Point(-2, 2, -2)));
+}
+
+TEST(TestWorld, TestIntersectionInShadow) {
+  World w;
+  w.lights().emplace_back(std::make_shared<Light>(Color(1, 1, 1), Point(0, 0, -10)));
+  w.objects().emplace_back(std::make_shared<Sphere>());
+  w.objects().emplace_back(std::make_shared<Sphere>(Transform::id().translate(0, 0, 10)));
+  Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+  Intersection i(4, *w.objects()[1]);
+  auto c = w.shade_hit(i.precompute(r));
+  EXPECT_EQ(Color(0.1f, 0.1f, 0.1f), c);
+}

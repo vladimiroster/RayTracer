@@ -47,7 +47,7 @@ namespace RayTracer {
   }
 
   Intersection::Computation::Computation(float t, const Object & obj, Point p, Vector eye, Vector normal) :
-  time(t), object(obj), point(p), eyev(eye), normalv(normal) 
+  time(t), object(obj), point(p), over_point(p), eyev(eye), normalv(normal) 
   {
     if (dot(normalv, eyev) < 0) {
       inside = true;
@@ -56,6 +56,8 @@ namespace RayTracer {
     else {
       inside = false;
     }
+    // Need to first (possibly) negate the normal
+    over_point = point + normalv * SHADE_EPS;
   }
 
 } // namespace RayTracer

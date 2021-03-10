@@ -24,7 +24,7 @@ TEST(TestProfiler, TestProfileEnabled) {
   ss >> label;
   ss >> time;
   EXPECT_EQ("test:", label);
-  EXPECT_GE(100, time);
+  EXPECT_LE(100, time);
 }
 
 TEST(TestProfiler, TestProfileDisabled) {

@@ -82,3 +82,12 @@ TEST(TestIntersection, TestIntersectInside) {
   // Normal inverted because the intersection is inside the object
   EXPECT_EQ(Vector(0, 0, -1), comps.normalv);
 }
+
+TEST(TestIntersection, TestHitOffsetsPoint) {
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Sphere s(Transform::id().translate(0, 0, 1));
+  Intersection i(5, s);
+  auto comps = i.precompute(r);
+  EXPECT_LE(comps.over_point.z, -epsilon / 2);
+  EXPECT_GE(comps.point.z, comps.over_point.z);
+}
