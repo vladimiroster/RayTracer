@@ -170,6 +170,9 @@
       <Project>{18e0f267-9998-4866-8321-1c09b7545e60}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
