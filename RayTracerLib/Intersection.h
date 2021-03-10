@@ -16,6 +16,7 @@ namespace RayTracer {
     // TODO: Handle scope problem. Maybe use weak pointer?
     std::reference_wrapper<const Object> _o;
 
+    // TODO: this is a pretty large epsilon, figure out why needed
     static inline constexpr float SHADE_EPS = 0.001f;
 
   public:

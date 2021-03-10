@@ -14,9 +14,9 @@ namespace RayTracer {
   public:
     Sphere(Transform t = Transform::id(), Material m = Material()) : Object(t, m) {}
 
-    virtual std::vector<Intersection> intersect(Ray r) override;
-
-    virtual Vector normal(Point p) const override;
+  protected:
+    virtual std::vector<Intersection> intersect_local(const Ray& r) const override;
+    virtual Vector normal_local(const Point& p) const override;
   };
 
 } // namespace RayTracer
