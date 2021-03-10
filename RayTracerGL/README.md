@@ -10,6 +10,7 @@ The app is very rudimentary (so far), but has the following features:
 3. Zoom in/out using numpad +/-
 4. Rotate around the x-axis using up/down arrows
 5. Rotate around the y-axis using the left/right arrows
+6. Rotate "up" around the z-axis by PI/4 using the *Home* key
 
 ## Setup
 The app uses [GLFW](https://www.glfw.org/) to access the OpenGL API. The following directories are what is specified in the VS project. Adjust the project accordingly if you choose other install locations.
@@ -25,3 +26,8 @@ To make a gif out of a set of saved images, install ImageMagic and the *convert*
 $ magick mogrify -format jpg *.ppm
 $ magick convert -delay 10 -loop 0 *.jpg <name>.gif
 ```
+
+## TODO
+1. World serialization/deserialization
+2. Moving the FROM and TO points to have better movement around the scene
+3. Setup text on the screen and move the render time and fps text to main screen (possibly create a console?)

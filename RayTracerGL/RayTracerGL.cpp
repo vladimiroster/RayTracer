@@ -50,8 +50,7 @@ void process_input(GLFWwindow* window, int key, int scancode, int action, int mo
       UP = rt::Transform::id().rot_z(3.14159f / 4.0f) * UP;
       break;
     case GLFW_KEY_Q:
-      glfwTerminate();
-      exit(0);
+      glfwSetWindowShouldClose(window, GLFW_TRUE);
       break;
     case GLFW_KEY_S:
       // Note: this needs to be last case because of c++ ctor issues
@@ -105,7 +104,7 @@ int main(int argc, char* argv[])
     return -1;
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(res.first, res.second, "Ray Tracer", NULL, NULL);
+  window = glfwCreateWindow(res.first, res.second, "Ray Tracer GL", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -143,7 +142,6 @@ int main(int argc, char* argv[])
     
     {
       auto profile = p.profile("Render frame");
-      // TODO: add "move" API to camera
       rt::Camera cam(res, FOV, rt::Transform::id().view(FROM, TO, UP));
       canvas = std::make_unique<rt::Canvas>(std::move(cam.render(w)));
     }
