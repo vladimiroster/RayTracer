@@ -146,7 +146,7 @@ void sphere(float sphere_radius_x, float sphere_radius_y, float z_ang, rt::Mater
         auto point = r.position(h->time());
         auto normal = h->object().normal(point);
         rt::Vector eye = -r.direction();
-        c.pixel(i, j) = rt::lighting(h->object().material(), light, point, eye, normal, false);
+        c.pixel(i, j) = rt::lighting(h->object().material(), std::ref(h->object()), light, point, eye, normal, false);
       }
     }
   }

@@ -14,10 +14,19 @@ namespace RayTracer {
     return !(lhs == rhs);
   }
 
-  Color lighting(Material m, Light light, Point p, Vector eyev, Vector normalv, bool in_shadow)
+  Color lighting(Material m, std::reference_wrapper<const Object> obj, Light light, Point p, Vector eyev, Vector normalv, bool in_shadow)
   {
+    // Choose where to use the pattern or the regular material color
+    Color c;
+    if (m.pattern) {
+      c = m.pattern->color_at_object(obj, p);
+    }
+    else {
+      c = m.color;
+    }
+
     // Combine the surface color with the light's color
-    auto effective_color = m.color * light.intensity;
+    auto effective_color = c * light.intensity;
 
     // Compute the ambient contribution
     auto ambient = effective_color * m.ambient;

@@ -44,6 +44,7 @@
     <ClCompile Include="materials_test.cpp" />
     <ClCompile Include="matrix_test.cpp" />
     <ClCompile Include="object_test.cpp" />
+    <ClCompile Include="pattern_test.cpp" />
     <ClCompile Include="plane_test.cpp" />
     <ClCompile Include="profiler_test.cpp" />
     <ClCompile Include="ray_test.cpp" />

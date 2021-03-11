@@ -34,7 +34,7 @@ namespace RayTracer {
   Color World::shade_hit(Intersection::Computation comps) const
   {
     // TODO: support multiple light sources
-    return lighting(comps.object.get().material(), *_lights.front(), comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
+    return lighting(comps.object.get().material(), comps.object, *_lights.front(), comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
   }
 
   Color World::color_at(const Ray & r) const
