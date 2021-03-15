@@ -74,3 +74,11 @@ TEST(TestPattern, TestGradientInterpolates) {
   EXPECT_EQ(Color(0.5f, 0.5f, 0.5f), p.color_at(Point(0.5f, 0, 0)));
   EXPECT_EQ(Color(0.25f, 0.25f, 0.25f), p.color_at(Point(0.75f, 0, 0)));
 }
+
+TEST(TestPattern, TestRingXandZ) {
+  RingPattern p(white, black);
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0)));
+  EXPECT_EQ(black, p.color_at(Point(1, 0, 0)));
+  EXPECT_EQ(black, p.color_at(Point(0, 0, 1)));
+  EXPECT_EQ(black, p.color_at(Point(0.708f, 0, 0.708f)));
+}

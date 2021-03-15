@@ -52,4 +52,12 @@ namespace RayTracer {
   private:
     Color _distance;
   };
+
+  class RingPattern : public TwoColorPattern {
+  public:
+    RingPattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform) {}
+
+    virtual Color color_at(Point p) const override;
+  };
+
 } // namespace RayTracer

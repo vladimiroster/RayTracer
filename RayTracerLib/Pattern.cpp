@@ -30,7 +30,13 @@ namespace RayTracer {
     auto retval = _c1 + _distance * fraction;
     return retval;
   }
-
-
+   
+  Color RingPattern::color_at(Point p) const
+  {
+    if (static_cast<int>(floorf(sqrtf(p.x * p.x + p.z * p.z))) % 2 == 0) {
+      return _c1;
+    }
+    return _c2;
+  }
 
 } // namespace RayTracer
