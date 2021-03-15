@@ -4,7 +4,7 @@
 #include <iostream>
 
 namespace RayTracer {
-  constexpr float epsilon = 0.001f;
+  constexpr float epsilon = 0.00001f;
 
   inline bool ApproxEqual(float a, float b, float epsilon) {
     return fabs(a - b) < epsilon;

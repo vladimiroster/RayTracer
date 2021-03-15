@@ -17,7 +17,7 @@ namespace RayTracer {
     std::reference_wrapper<const Object> _o;
 
     // TODO: this is a pretty large epsilon, figure out why needed
-    static inline constexpr float SHADE_EPS = 0.001f;
+    static inline constexpr float SHADE_EPS = 0.00001f;
 
   public:
     Intersection(float time, const Object& obj) : _t(time), _o(obj) {}

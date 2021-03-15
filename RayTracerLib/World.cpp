@@ -33,8 +33,11 @@ namespace RayTracer {
 
   Color World::shade_hit(Intersection::Computation comps) const
   {
-    // TODO: support multiple light sources
-    return lighting(comps.object.get().material(), comps.object, *_lights.front(), comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
+    Color c = black;
+    for (auto l : _lights) {
+      c = c + lighting(comps.object.get().material(), comps.object, *l, comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
+    }
+    return c;
   }
 
   Color World::color_at(const Ray & r) const
@@ -51,14 +54,16 @@ namespace RayTracer {
 
   bool World::is_shadowed(Point p) const
   {
-    // TODO: multiple light sources
-    auto point_to_light = _lights.front()->position - p;
-    auto distance = magnitude(point_to_light);
-    Ray r(p, normalize(point_to_light));
-    auto xs = intersect(r);
-    auto h = hit(xs);
-    if (h && h->time() < distance) {
-      return true;
+    // TODO: write tests for this, not working perfectly
+    for (auto l : _lights) {
+      auto point_to_light = l->position - p;
+      auto distance = magnitude(point_to_light);
+      Ray r(p, normalize(point_to_light));
+      auto xs = intersect(r);
+      auto h = hit(xs);
+      if (h && h->time() < distance) {
+        return true;
+      }
     }
     return false;
   }
