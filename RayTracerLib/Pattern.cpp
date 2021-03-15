@@ -24,4 +24,9 @@ namespace RayTracer {
   }
 
 
+  Color GradientPattern::color_at(Point p) const
+  {
+    return Color();
+  }
+
 } // namespace RayTracer

@@ -24,18 +24,29 @@ namespace RayTracer {
     Transform _inverse;
   };
 
-  class StripePattern : public Pattern {
+  class TwoColorPattern : public Pattern {
   public:
-    StripePattern(Color a, Color b, Transform transform = Transform::id()) : _c1(a), _c2(b), Pattern(transform) {}
-
-    virtual Color color_at(Point p) const override;
+    TwoColorPattern(Color a, Color b, Transform transform = Transform::id()) : _c1(a), _c2(b), Pattern(transform) {}
 
     std::pair<Color, Color> colors() const {
       return std::make_pair(_c1, _c2);
     }
-  private:
+  protected:
     Color _c1;
     Color _c2;
   };
 
+  class StripePattern : public TwoColorPattern {
+  public:
+    StripePattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform) {}
+
+    virtual Color color_at(Point p) const override;
+  };
+
+  class GradientPattern : public TwoColorPattern {
+  public:
+    GradientPattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform) {}
+
+    virtual Color color_at(Point p) const override;
+  };
 } // namespace RayTracer
