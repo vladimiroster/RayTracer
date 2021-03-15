@@ -91,7 +91,7 @@ void load_world_2(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
   rt::Material right_mat(rt::Color(0, 0, 0), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::StripePattern>(rt::Color(0.5f, 1, 0.1f), rt::Color(0.5f, 0, 0.1f), rt::Transform::id().scale(0.25f, 0.25f, 0.25f).rot_z(3.14159f / 3.0f)));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0, -0.5f), right_mat));
-  rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
+  rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::GradientPattern>(rt::Color(1, 1, 0.1f), rt::Color(0, 0, 0.1f)));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));

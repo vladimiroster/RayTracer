@@ -23,10 +23,14 @@ namespace RayTracer {
     }
   }
 
-
+  // TODO: doesn't look too nice
   Color GradientPattern::color_at(Point p) const
   {
-    return Color();
+    float fraction = p.x - floorf(p.x);
+    auto retval = _c1 + _distance * fraction;
+    return retval;
   }
+
+
 
 } // namespace RayTracer

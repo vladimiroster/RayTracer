@@ -76,7 +76,7 @@ TEST(TestObject, TestTranslatedNormal) {
 }
 
 TEST(TestObject, TestTransformedNormal) {
-  TestShape s(Transform::id().rot_z(M_PI / 5.0f).scale(1, 0.5f, 1));
+  TestShape s(Transform::id().rot_z(static_cast<float>(M_PI) / 5.0f).scale(1, 0.5f, 1));
   auto n = s.normal(Point(0, sqrtf(2)/2, -sqrtf(2)/2));
   EXPECT_EQ(Vector(0, 0.97014f, -0.24254f), n);
 }

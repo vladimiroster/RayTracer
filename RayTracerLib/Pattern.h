@@ -45,8 +45,11 @@ namespace RayTracer {
 
   class GradientPattern : public TwoColorPattern {
   public:
-    GradientPattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform) {}
+    GradientPattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform), _distance(b - a) {}
 
     virtual Color color_at(Point p) const override;
+
+  private:
+    Color _distance;
   };
 } // namespace RayTracer

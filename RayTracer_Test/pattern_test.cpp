@@ -66,3 +66,11 @@ TEST(TestPattern, TestStripeVarX) {
   EXPECT_EQ(black, p.color_at(Point(-1, 0, 0)));
   EXPECT_EQ(white, p.color_at(Point(-1.1f, 0, 0)));
 }
+
+TEST(TestPattern, TestGradientInterpolates) {
+  GradientPattern p(white, black);
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color(0.75f, 0.75f, 0.75f), p.color_at(Point(0.25f, 0, 0)));
+  EXPECT_EQ(Color(0.5f, 0.5f, 0.5f), p.color_at(Point(0.5f, 0, 0)));
+  EXPECT_EQ(Color(0.25f, 0.25f, 0.25f), p.color_at(Point(0.75f, 0, 0)));
+}
