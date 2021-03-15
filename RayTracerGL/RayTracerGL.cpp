@@ -89,7 +89,7 @@ void load_world_2(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id(), floor_mat));
   rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
-  rt::Material right_mat(rt::Color(0, 0, 0), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::Pattern>(rt::Color(0.5f, 1, 0.1f), rt::Color(0.5f, 0, 0.1f), rt::Transform::id().scale(0.25f, 0.25f, 0.25f).rot_z(3.14159f / 3.0f)));
+  rt::Material right_mat(rt::Color(0, 0, 0), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::StripePattern>(rt::Color(0.5f, 1, 0.1f), rt::Color(0.5f, 0, 0.1f), rt::Transform::id().scale(0.25f, 0.25f, 0.25f).rot_z(3.14159f / 3.0f)));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0, -0.5f), right_mat));
   rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
     return -1;
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(res.first, res.second, "Ray Tracer GL", NULL, NULL);
+  window = glfwCreateWindow(static_cast<int>(res.first), static_cast<int>(res.second), "Ray Tracer GL", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
     
     {
       auto profile = p.profile("Draw frame");
-      glDrawPixels(res.first, res.second, GL_RGBA, GL_FLOAT, canvas->canvas());
+      glDrawPixels(static_cast<GLsizei>(res.first), static_cast<GLsizei>(res.second), GL_RGBA, GL_FLOAT, canvas->canvas());
 
       /* Swap front and back buffers */
       glfwSwapBuffers(window);

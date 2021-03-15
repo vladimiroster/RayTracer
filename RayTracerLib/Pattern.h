@@ -9,25 +9,33 @@ namespace RayTracer {
 
   class Pattern {
   public:
-    Pattern(Color a, Color b, Transform transform = Transform::id()) : _c1(a), _c2(b), _transform(transform), _inverse(transform.inverse()) {}
+    Pattern(Transform transform = Transform::id()) : _transform(transform), _inverse(transform.inverse()) {}
 
-    Color color_at(Point p) const;
+    virtual Color color_at(Point p) const = 0;
 
     Color color_at_object(std::reference_wrapper<const Object> o, Point p) const;
     
-    std::pair<Color, Color> colors() const {
-      return std::make_pair(_c1, _c2);
-    }
-
     const Transform& transform() const {
       return _transform;
     }
 
   private:
-    Color _c1;
-    Color _c2;
     Transform _transform;
     Transform _inverse;
+  };
+
+  class StripePattern : public Pattern {
+  public:
+    StripePattern(Color a, Color b, Transform transform = Transform::id()) : _c1(a), _c2(b), Pattern(transform) {}
+
+    virtual Color color_at(Point p) const override;
+
+    std::pair<Color, Color> colors() const {
+      return std::make_pair(_c1, _c2);
+    }
+  private:
+    Color _c1;
+    Color _c2;
   };
 
 } // namespace RayTracer
