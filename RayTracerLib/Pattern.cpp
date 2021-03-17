@@ -18,9 +18,7 @@ namespace RayTracer {
     if (static_cast<long long>(floorf(p.x)) % 2 == 0) {
       return _c1;
     }
-    else {
-      return _c2;
-    }
+    return _c2;
   }
 
   // TODO: doesn't look too nice
@@ -34,6 +32,14 @@ namespace RayTracer {
   Color RingPattern::color_at(Point p) const
   {
     if (static_cast<int>(floorf(sqrtf(p.x * p.x + p.z * p.z))) % 2 == 0) {
+      return _c1;
+    }
+    return _c2;
+  }
+
+  Color CheckersPattern::color_at(Point p) const
+  {
+    if (static_cast<long long>(floorf(p.x) + floorf(p.y) + floorf(p.z)) % 2 == 0) {
       return _c1;
     }
     return _c2;

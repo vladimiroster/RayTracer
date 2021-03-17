@@ -60,4 +60,12 @@ namespace RayTracer {
     virtual Color color_at(Point p) const override;
   };
 
+  // TODO: Spherical texture mapping (UV mapping)
+  class CheckersPattern : public TwoColorPattern {
+  public:
+    CheckersPattern(Color a, Color b, Transform transform = Transform::id()) : TwoColorPattern(a, b, transform) {}
+
+    virtual Color color_at(Point p) const override;
+  };
+
 } // namespace RayTracer

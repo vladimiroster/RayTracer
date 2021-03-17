@@ -82,3 +82,24 @@ TEST(TestPattern, TestRingXandZ) {
   EXPECT_EQ(black, p.color_at(Point(0, 0, 1)));
   EXPECT_EQ(black, p.color_at(Point(0.708f, 0, 0.708f)));
 }
+
+TEST(TestPattern, TestCheckersInX) {
+  CheckersPattern p(white, black);
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0)));
+  EXPECT_EQ(white, p.color_at(Point(0.99f, 0, 0)));
+  EXPECT_EQ(black, p.color_at(Point(1.01f, 0, 0)));
+}
+
+TEST(TestPattern, TestCheckersInY) {
+  CheckersPattern p(white, black);
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0)));
+  EXPECT_EQ(white, p.color_at(Point(0, 0.99f, 0)));
+  EXPECT_EQ(black, p.color_at(Point(0, 1.01f, 0)));
+}
+
+TEST(TestPattern, TestCheckersInZ) {
+  CheckersPattern p(white, black);
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0)));
+  EXPECT_EQ(white, p.color_at(Point(0, 0, 0.99f)));
+  EXPECT_EQ(black, p.color_at(Point(0, 0, 1.01f)));
+}
