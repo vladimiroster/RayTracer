@@ -85,11 +85,15 @@ void load_world_1(rt::World& w) {
 // TODO: https://www.w3.org/TR/2018/REC-css-color-3-20180619/#svg-color
 
 void load_world_2(rt::World& w) {
-  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0);
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 
+    std::make_shared<rt::CheckersPattern>(
+      std::make_shared<rt::StripePattern>(std::make_shared<rt::SolidPattern>(rt::black), std::make_shared<rt::SolidPattern>(rt::white)), 
+      std::make_shared<rt::StripePattern>(std::make_shared<rt::SolidPattern>(rt::Color(1, 0, 0)), std::make_shared<rt::SolidPattern>(rt::Color(0, 0, 1)), rt::Transform::id().rot_x(3.14159f/2))
+    ));
   w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id(), floor_mat));
-  rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::CheckersPattern>(rt::Color(1, 1, 0.1f), rt::Color(0, 0, 0.1f), rt::Transform::id().scale(0.5f, 0.5f, 0.5f)));
+  rt::Material middle_mat(rt::Color(0.1f, 1, 0.5f), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::CheckersPattern>(std::make_shared<rt::SolidPattern>(rt::Color(1, 1, 0.1f)), std::make_shared<rt::SolidPattern>(rt::Color(0, 0, 0.1f)), rt::Transform::id().scale(0.5f, 0.5f, 0.5f)));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-0.5f, 1, 0.5f), middle_mat));
-  rt::Material right_mat(rt::Color(0, 0, 0), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::StripePattern>(rt::Color(0.5f, 1, 0.1f), rt::Color(0.5f, 0, 0.1f), rt::Transform::id().scale(0.25f, 0.25f, 0.25f).rot_z(3.14159f / 3.0f)));
+  rt::Material right_mat(rt::Color(0, 0, 0), 0.1f, 0.7f, 0.3f, 200, std::make_shared<rt::StripePattern>(std::make_shared<rt::SolidPattern>(rt::Color(0.5f, 1, 0.1f)), std::make_shared<rt::SolidPattern>(rt::Color(0.5f, 0, 0.1f)), rt::Transform::id().scale(0.25f, 0.25f, 0.25f).rot_z(3.14159f / 3.0f)));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0, -0.5f), right_mat));
   rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));

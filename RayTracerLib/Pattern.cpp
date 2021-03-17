@@ -13,36 +13,46 @@ namespace RayTracer {
     return color_at(pat_p);
   }
 
+  Color SolidPattern::color_at(Point p) const
+  {
+    return _c;
+  }
+
   Color StripePattern::color_at(Point p) const
   {
     if (static_cast<long long>(floorf(p.x)) % 2 == 0) {
-      return _c1;
+      return _p1->color_at(p);
     }
-    return _c2;
+    return _p2->color_at(p);
   }
 
   // TODO: doesn't look too nice
-  Color GradientPattern::color_at(Point p) const
-  {
-    float fraction = p.x - floorf(p.x);
-    auto retval = _c1 + _distance * fraction;
-    return retval;
-  }
+  //Color GradientPattern::color_at(Point p) const
+  //{
+  //  float fraction = p.x - floorf(p.x);
+  //  auto retval = _c1.color() + _distance * fraction;
+  //  return retval;
+  //}
    
   Color RingPattern::color_at(Point p) const
   {
     if (static_cast<int>(floorf(sqrtf(p.x * p.x + p.z * p.z))) % 2 == 0) {
-      return _c1;
+      return _p1->color_at(p);
     }
-    return _c2;
+    return _p2->color_at(p);
   }
 
   Color CheckersPattern::color_at(Point p) const
   {
     if (static_cast<long long>(floorf(p.x) + floorf(p.y) + floorf(p.z)) % 2 == 0) {
-      return _c1;
+      return _p1->color_at(p);
     }
-    return _c2;
+    return _p2->color_at(p);
+  }
+
+  Color BlendedPattern::color_at(Point p) const
+  {
+    return _blender(_p1->color_at(p), _p2->color_at(p));
   }
 
 } // namespace RayTracer
