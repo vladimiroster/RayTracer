@@ -7,7 +7,9 @@ namespace RayTracer {
       ApproxEqual(lhs.ambient, rhs.ambient, epsilon) &&
       ApproxEqual(lhs.diffuse, rhs.diffuse, epsilon) &&
       ApproxEqual(lhs.specular, rhs.specular, epsilon) &&
-      ApproxEqual(lhs.shininess, rhs.shininess, epsilon);
+      ApproxEqual(lhs.shininess, rhs.shininess, epsilon) &&
+      ApproxEqual(lhs.reflective, rhs.reflective, epsilon);
+    // TODO: Add pattern to the comparison
   }
 
   bool operator!=(const Material& lhs, const Material& rhs) {

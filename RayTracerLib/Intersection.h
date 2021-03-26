@@ -16,9 +16,6 @@ namespace RayTracer {
     // TODO: Handle scope problem. Maybe use weak pointer?
     std::reference_wrapper<const Object> _o;
 
-    // TODO: this is a pretty large epsilon, figure out why needed
-    static inline constexpr float SHADE_EPS = 0.00001f;
-
   public:
     Intersection(float time, const Object& obj) : _t(time), _o(obj) {}
 
@@ -35,14 +32,18 @@ namespace RayTracer {
       std::reference_wrapper<const Object> object;
       Point point;
       Point over_point;
+      Point under_point;
       Vector eyev;
       Vector normalv;
+      Vector reflectv;
       bool inside;
+      float n1;
+      float n2;
 
-      Computation(float t, const Object& obj, Point p, Vector eye, Vector normal);
+      Computation(float t, const Object& obj, Point p, Vector eye, Vector normal, Vector reflect, float refl_n1, float refl_n2);
     };
 
-    Computation precompute(const Ray& r) const;
+    Computation precompute(const Ray& r, const std::vector<Intersection>& xs) const;
 
     bool operator==(const Intersection& rhs) const;
     bool operator!=(const Intersection& rhs) const;
@@ -50,5 +51,7 @@ namespace RayTracer {
 
 
   std::optional<Intersection> hit(const std::vector<Intersection>& xs);
+
+  float schlick(const Intersection::Computation& comps);
 
 } // namespace RayTracer

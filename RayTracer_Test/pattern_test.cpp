@@ -6,14 +6,6 @@
 
 using namespace RayTracer;
 
-class TestPattern : public Pattern {
-public:
-  TestPattern(Transform t = Transform::id()) : Pattern(t) {}
-  virtual Color color_at(Point p) const override {
-    return Color(p.x, p.y, p.z);
-  }
-};
-
 TEST(TestPattern, TestCustomTransform) {
   TestPattern p(Transform::id().translate(1, 2, 3));
   ASSERT_EQ(Transform::id().translate(1, 2, 3), p.transform());

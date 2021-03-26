@@ -30,11 +30,15 @@ namespace RayTracer {
 
     std::vector<Intersection> intersect(Ray r) const;
 
-    Color shade_hit(Intersection::Computation comps) const;
+    Color shade_hit(const Intersection::Computation& comps, size_t remaining = 4) const;
 
-    Color color_at(const Ray& r) const;
+    Color color_at(const Ray& r, size_t remaining = 4) const;
 
     bool is_shadowed(Point p) const;
+
+    Color reflected_color(const Intersection::Computation& comps, size_t remaining = 4) const;
+
+    Color refracted_color(const Intersection::Computation& comps, size_t remaining = 4) const;
 
   private:
     std::vector<std::shared_ptr<Object>> _objects;

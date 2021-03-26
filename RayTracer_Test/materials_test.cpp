@@ -92,7 +92,7 @@ TEST(TestLighting, TestSurfaceInShadow) {
 }
 
 TEST(TestLighting, TestWithPattern) {
-  Material m(black, 1, 0, 0, 0, std::make_shared<StripePattern>(std::make_shared<SolidPattern>(white), std::make_shared<SolidPattern>(black)));
+  Material m(black, 1, 0, 0, 0, 0, 0, 1, std::make_shared<StripePattern>(std::make_shared<SolidPattern>(white), std::make_shared<SolidPattern>(black)));
   Vector eyev(0, 0, -1);
   Vector normalv(0, 0, -1);
   Light l(Color(1, 1, 1), Point(0, 0, -10));

@@ -9,7 +9,7 @@ namespace RayTracer {
   {
     auto w = std::make_unique<World>();
     w->lights().emplace_back(std::make_shared<Light>(Color(1, 1, 1), Point(-10, 10, -10)));
-    w->objects().emplace_back(std::make_shared<Sphere>(Transform::id(), Material(Color(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200)));
+    w->objects().emplace_back(std::make_shared<Sphere>(Transform::id(), Material(Color(0.8f, 1.0f, 0.6f), 0.1f, 0.7f, 0.2f, 200, 0, 0, 1)));
     w->objects().emplace_back(std::make_shared<Sphere>(Transform::id().scale(0.5f, 0.5f, 0.5f)));
     return w;
   }
@@ -31,21 +31,32 @@ namespace RayTracer {
     return xs;
   }
 
-  Color World::shade_hit(Intersection::Computation comps) const
+  Color World::shade_hit(const Intersection::Computation& comps, size_t remaining) const
   {
     Color c = black;
     for (auto l : _lights) {
       c = c + lighting(comps.object.get().material(), comps.object, *l, comps.over_point, comps.eyev, comps.normalv, is_shadowed(comps.over_point));
     }
-    return c;
+    // Add reflection and refraction
+    // Account for total internal reflection
+    auto reflected = reflected_color(comps, remaining);
+    auto refracted = refracted_color(comps, remaining);
+
+    if (comps.object.get().material().reflective > 0 && comps.object.get().material().transparency > 0) {
+      auto reflectance = schlick(comps);
+      return c + reflected * reflectance + refracted * (1 - reflectance);
+    }
+    else {
+      return c + reflected + refracted;
+    }
   }
 
-  Color World::color_at(const Ray & r) const
+  Color World::color_at(const Ray & r, size_t remaining) const
   {
     auto xs = intersect(r);
     auto i = hit(xs);
     if (i) {
-      return shade_hit(i->precompute(r));
+      return shade_hit(i->precompute(r, xs), remaining);
     }
     else {
       return black;
@@ -66,6 +77,49 @@ namespace RayTracer {
       }
     }
     return false;
+  }
+
+  Color World::reflected_color(const Intersection::Computation& comps, size_t remaining) const
+  {
+    if (remaining < 1) {
+      return black;
+    }
+    if (comps.object.get().material().reflective == 0.0f) {
+      return black;
+    }
+    Ray reflect_ray(comps.over_point, comps.reflectv);
+    auto c = color_at(reflect_ray, remaining - 1);
+
+    return c * comps.object.get().material().reflective;
+  }
+
+  Color World::refracted_color(const Intersection::Computation& comps, size_t remaining) const
+  {
+    if (remaining == 0) {
+      return black;
+    }
+    if (comps.object.get().material().transparency == 0) {
+      return black;
+    }
+
+    // Evaluate total internal reflection
+    auto n_ratio = comps.n1 / comps.n2;
+    auto cos_i = dot(comps.eyev, comps.normalv);
+    auto sin2_t = n_ratio * n_ratio * (1 - cos_i * cos_i);
+    if (sin2_t > 1) {
+      // Indeed
+      return black;
+    }
+
+    auto cos_t = sqrtf(1.0f - sin2_t);
+
+    // Compute the direction of the refracted ray
+    Vector direction = comps.normalv * (n_ratio * cos_i - cos_t) - comps.eyev * n_ratio;
+    Ray refract_ray(comps.under_point, direction);
+
+    auto color = color_at(refract_ray, remaining - 1) * comps.object.get().material().transparency;
+
+    return color;
   }
 
 } //namespace RayTracer
