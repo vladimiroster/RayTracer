@@ -43,7 +43,7 @@ namespace RayTracer {
     bool operator==(const Object& rhs) const;
     bool operator!=(const Object& rhs) const;
 
-  protected:
+//  protected: TODO: moved to public because of unit tests
     virtual std::vector<Intersection> intersect_local(const Ray& r) const = 0;
     virtual Vector normal_local(const Point& r) const = 0;
 

@@ -9,6 +9,7 @@ using namespace std::chrono_literals;
 
 #include "../RayTracerLib/World.h"
 #include "../RayTracerLib/Sphere.h"
+#include "../RayTracerLib/Cube.h"
 #include "../RayTracerLib/Plane.h"
 #include "../RayTracerLib/Camera.h"
 #include "../RayTracerLib/Profiler.h"
@@ -20,7 +21,7 @@ rt::Point FROM(0, 1.5f, -5);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
 auto res = rt::Camera::RES_720P;
-float FOV = 3.14159f / 3.0f;
+float FOV = 3.14159f / 2; //3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
 
@@ -83,6 +84,7 @@ void load_world_1(rt::World& w) {
 }
 
 // TODO: https://www.w3.org/TR/2018/REC-css-color-3-20180619/#svg-color
+// Mirror material: Color(0.1, 0.1, 0.1), ambient: 0.1, diffuse: 0.7, reflective: 0.9, specular: 0.3, shininess: 200.0)
 
 void load_world_2(rt::World& w) {
   rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0.5, 0.5, 1.5,
@@ -97,9 +99,32 @@ void load_world_2(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0, -0.5f), right_mat));
   rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(-1.5f, 0.33f, -0.75f), left_mat));
+  //w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 1.5f, 1.5f).translate(-1.5f, 0.33f, -0.75f), middle_mat));
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
   //w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(0.5, 0.5, 0), rt::Point(-5, 5, 5)));
+}
+
+void load_world_3(rt::World& w) {
+  //w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0.5, 0.5, 1.5);
+  //w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id(), floor_mat));
+
+  // Table
+  rt::Material table_mat(rt::Color(1, 1, 1), 0.1f, 0.7f, 0.5f, 200, 0, 0, 100); //rt::glass);
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 8, 0).scale(3, 0.1f, 1), table_mat)); // Table top
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(0.1, 0.8, 0.1f).translate(1.8f, -0.05f, 0.8f), table_mat)); // Back right leg
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(0.1, 0.8, 0.1f).translate(1.8f, -0.05f, -0.8f), table_mat)); // Front right leg
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(0.1, 0.8, 0.1f).translate(-1.8f, -0.05f, 0.8f), table_mat)); // Back left leg
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(0.1, 0.8, 0.1f).translate(-1.8f, -0.05f, -0.8f), table_mat)); // Front left leg
+
+  // Lamp
+  rt::Material lamp_mat(rt::Color(1, 1, 0), 0.1f, 0.7f, 0.5f, 200, 1, 1, 0);
+  //w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(0.1, 0.3f, 0.1).translate(1.6f, 1.2, 0.6f), lamp_mat)); // Lamp leg
+  //w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.3, 0.3f, 0.3).translate(1.6f, 1.7f, 0.6f), lamp_mat)); // Lamp bulb
+
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(2, 2, 2), rt::Point(1.6, 1.7, 0.6)));
 }
 
 int main(int argc, char* argv[])
@@ -131,7 +156,7 @@ int main(int argc, char* argv[])
   // Setup the world
   rt::World w;
 
-  load_world_2(w);
+  load_world_3(w);
 
   rt::Profiler p(true);
 

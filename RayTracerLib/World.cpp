@@ -21,6 +21,7 @@ namespace RayTracer {
     xs.reserve(_objects.size() * 2);
 
     for (auto obj : _objects) {
+      // TODOVLAD: Here
       auto obj_xs = obj->intersect(r);
       xs.insert(xs.end(), obj_xs.begin(), obj_xs.end());
     }

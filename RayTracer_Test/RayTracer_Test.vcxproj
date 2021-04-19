@@ -39,6 +39,7 @@
   <ItemGroup>
     <ClCompile Include="camera_test.cpp" />
     <ClCompile Include="canvas_test.cpp" />
+    <ClCompile Include="cube_test.cpp" />
     <ClCompile Include="intersection_test.cpp" />
     <ClCompile Include="lighting_test.cpp" />
     <ClCompile Include="materials_test.cpp" />
