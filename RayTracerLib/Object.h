@@ -5,6 +5,8 @@
 #include "Ray.h"
 #include "Intersection.h"
 
+#include "../PhysicsLib/Behavior.h"
+
 namespace RayTracer {
   class Object {
   public:
@@ -39,6 +41,16 @@ namespace RayTracer {
       return normalize(w_n);
     }
 
+    void setup() {
+      if (_behavior)
+        _behavior->setup();
+    }
+
+    void act() {
+      if (_behavior)
+        _behavior->action();
+    }
+
     // TODO: add virtual compare method for specific derived class comparisons
     bool operator==(const Object& rhs) const;
     bool operator!=(const Object& rhs) const;
@@ -53,6 +65,7 @@ namespace RayTracer {
 
   protected:
     Material _material;
+    std::unique_ptr<Physics::Behavior> _behavior;
   };
 
 } // namespace RayTracer

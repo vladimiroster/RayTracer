@@ -3,7 +3,7 @@
 namespace Physics {
   class Behavior {
   public:
-    virtual void Setup() = 0;
-    virtual void Action() = 0;
+    virtual void setup() = 0;
+    virtual void action() = 0;
   };
 } // namespace Physics

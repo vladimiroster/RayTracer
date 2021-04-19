@@ -40,6 +40,10 @@ namespace RayTracer {
 
     Color refracted_color(const Intersection::Computation& comps, size_t remaining = 4) const;
 
+    void setup();
+
+    void act();
+
   private:
     std::vector<std::shared_ptr<Object>> _objects;
     std::vector<std::shared_ptr<Light>> _lights;

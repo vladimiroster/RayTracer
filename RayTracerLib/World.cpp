@@ -123,4 +123,18 @@ namespace RayTracer {
     return color;
   }
 
+  void World::setup()
+  {
+    for (auto obj : _objects) {
+      obj->setup();
+    }
+  }
+
+  void World::act()
+  {
+    for (auto obj : _objects) {
+      obj->act();
+    }
+  }
+
 } //namespace RayTracer

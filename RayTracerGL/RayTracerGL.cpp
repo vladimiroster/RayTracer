@@ -20,8 +20,8 @@ namespace rt = RayTracer;
 rt::Point FROM(0, 1.5f, -5);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
-auto res = rt::Camera::RES_720P;
-float FOV = 3.14159f / 2; //3.14159f / 3.0f;
+auto res = rt::Camera::RES_640X480;
+float FOV = 3.14159f / 1.3f; //3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
 
@@ -127,6 +127,13 @@ void load_world_3(rt::World& w) {
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(2, 2, 2), rt::Point(1.6, 1.7, 0.6)));
 }
 
+void load_world_4(rt::World& w) {
+  rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id(), left_mat));
+
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+}
+
 int main(int argc, char* argv[])
 {
   GLFWwindow* window;
@@ -156,7 +163,8 @@ int main(int argc, char* argv[])
   // Setup the world
   rt::World w;
 
-  load_world_3(w);
+  load_world_4(w);
+  w.setup();
 
   rt::Profiler p(true);
 
@@ -169,7 +177,6 @@ int main(int argc, char* argv[])
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window))
   {
-    /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
     
     {
@@ -197,6 +204,11 @@ int main(int argc, char* argv[])
     }
 
     std::cerr << "Frame: " << frame_num << ", frame in second: " << fps_num << ", FPS: " << fps << "\n";
+
+    {
+      auto profile = p.profile("Physics");
+      w.act();
+    }
 
     /* Poll for and process events */
     glfwPollEvents();
