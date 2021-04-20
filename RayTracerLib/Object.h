@@ -41,6 +41,10 @@ namespace RayTracer {
       return normalize(w_n);
     }
 
+    void set_behavior(std::shared_ptr<Physics::Behavior> beh) {
+      _behavior = beh;
+    }
+
     void setup() {
       if (_behavior)
         _behavior->setup();
@@ -49,6 +53,12 @@ namespace RayTracer {
     void act() {
       if (_behavior)
         _behavior->action();
+    }
+
+    void move(Transform transform) {
+      // TODO: better way to do this?
+      _transform = transform;
+      _inverse = _transform.inverse();
     }
 
     // TODO: add virtual compare method for specific derived class comparisons
@@ -65,7 +75,7 @@ namespace RayTracer {
 
   protected:
     Material _material;
-    std::unique_ptr<Physics::Behavior> _behavior;
+    std::shared_ptr<Physics::Behavior> _behavior;
   };
 
 } // namespace RayTracer
