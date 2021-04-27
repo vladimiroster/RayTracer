@@ -114,8 +114,8 @@ namespace Physics {
       // map to (-1,1)
       // float outgoing = start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
       float outgoing =
-        -0.01f + (0.01f - (-0.01f)) * ((n - 0.0f) / (1.0f - 0.0f));
-      _time += 0.0001;
+        -0.01f + (0.01f - (-0.01f)) * (((float)n - 0.0f) / (1.0f - 0.0f));
+      _time += 0.0001f;
       return outgoing;
     }
   private:

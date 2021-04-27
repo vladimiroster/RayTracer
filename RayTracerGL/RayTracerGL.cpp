@@ -16,11 +16,13 @@ using namespace std::chrono_literals;
 
 #include "../PhysicsLib/RandomWalker.h"
 #include "../PhysicsLib/Distribution.h"
+#include "../PhysicsLib/BouncingObject.h"
+#include "../PhysicsLib/Mover.h"
 
 namespace rt = RayTracer;
 
 // TODO: find a better place for these (and design the GL app better in general)
-rt::Point FROM(0, 1.5f, -5);
+rt::Point FROM(0, 1.5f, -15);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
 auto res = rt::Camera::RES_640X480;
@@ -151,13 +153,15 @@ void load_world_4(rt::World& w) {
   //  Physics::MonteCarlo(std::uniform_real_distribution<float>(-1, 1))
   //  ));
 
-  w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<Physics::PerlinDistribution>>(
-    w.objects().back().get(), 
-    Physics::PerlinDistribution(0), 
-    Physics::PerlinDistribution(1000), 
-    Physics::PerlinDistribution(2000)
-    ));
+  //w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<Physics::PerlinDistribution>>(
+  //  w.objects().back().get(), 
+  //  Physics::PerlinDistribution(0), 
+  //  Physics::PerlinDistribution(1000), 
+  //  Physics::PerlinDistribution(2000)
+  //  ));
 
+//  w.objects()[0]->set_behavior(std::make_shared<Physics::BouncingObject>(w.objects().back().get(), rt::Vector(-10, -8, -7), rt::Vector(10, 8, 7), rt::Vector(0.1f, 0.1f, 0.1f)));
+  w.objects()[0]->set_behavior(std::make_shared<Physics::Mover>(w.objects().back().get(), rt::zero_vec, rt::Vector(0, -0.09f, 0)));
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 }
 

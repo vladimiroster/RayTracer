@@ -152,7 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Behavior.h" />
+    <ClInclude Include="BouncingObject.h" />
     <ClInclude Include="Distribution.h" />
+    <ClInclude Include="Gravity.h" />
+    <ClInclude Include="Mover.h" />
     <ClInclude Include="RandomWalker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

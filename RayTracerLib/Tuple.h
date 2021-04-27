@@ -49,6 +49,9 @@ namespace RayTracer {
     Vector(Tuple&& t) : Vector(t.x, t.y, t.z) {}
   };
 
+  // TODO: move constants into classes
+  inline const Vector zero_vec(0, 0, 0);
+
   struct Color : public Tuple {
     Color() : Tuple(0.0f, 0.0f, 0.0f, 0.0f) {}
     Color(float r, float g, float b) : Tuple(r, g, b, 0.0f) {}

@@ -6,6 +6,11 @@ namespace RayTracer {
     return Transform(id4);
   }
 
+  Transform Transform::translate(Vector v) const
+  {
+    return translate(v.x, v.y, v.z);
+  }
+
   Transform Transform::translate(float x, float y, float z) const
   {
     auto t = id4;

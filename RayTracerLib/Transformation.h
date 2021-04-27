@@ -10,6 +10,7 @@ namespace RayTracer {
     Transform(const Matrix<4>& m) : Matrix<4>(m) {}
 
     static Transform id();
+    Transform translate(Vector v) const;
     Transform translate(float x, float y, float z) const;
     Transform scale(float x, float y, float z) const;
     // TODO: add arbitrary quaternion rotations

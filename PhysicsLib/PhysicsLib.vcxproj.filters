@@ -24,5 +24,14 @@
     <ClInclude Include="Distribution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BouncingObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gravity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mover.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
