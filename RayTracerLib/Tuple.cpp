@@ -52,7 +52,11 @@ namespace RayTracer {
   }
 
   Tuple normalize(const Tuple& tpl) {
-    return tpl / magnitude(tpl);
+    float mag;
+    if ((mag = magnitude(tpl)) < epsilon) {
+      return zero;
+    }
+    return tpl / mag;
   }
 
   float dot(const Tuple& lhs, const Tuple& rhs) {

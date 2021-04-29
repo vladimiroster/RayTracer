@@ -22,11 +22,12 @@ using namespace std::chrono_literals;
 namespace rt = RayTracer;
 
 // TODO: find a better place for these (and design the GL app better in general)
-rt::Point FROM(0, 1.5f, -15);
+rt::Point FROM(0, 1.5f, -50);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
+// Away is +z
 auto res = rt::Camera::RES_640X480;
-float FOV = 3.14159f / 1.3f; //3.14159f / 3.0f;
+float FOV = 3.14159f / 3; //3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
 
@@ -132,38 +133,38 @@ void load_world_3(rt::World& w) {
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(2, 2, 2), rt::Point(1.6f, 1.7f, 0.6f)));
 }
 
-void load_world_4(rt::World& w) {
-  rt::Material left_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
-  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id(), left_mat));
-  
-  // TODO: check why weak_ptr is not moving correctly
-  //w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<std::uniform_real_distribution<float>>>(w.objects().back().get(), std::uniform_real_distribution<float>(-1.0f, 1.0f)));
+// Spheres falling with gravity and wind
+void falling_spheres(rt::World& w) {
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
+  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -10, 0), floor_mat));
 
-  //w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<Physics::Distribution<std::normal_distribution<float>>>>(
-  //  w.objects().back().get(), 
-  //  Physics::Distribution(std::normal_distribution<float>(1, 1)), 
-  //  Physics::Distribution(std::normal_distribution<float>(1, 1)), 
-  //  Physics::Distribution(std::normal_distribution<float>(1, 1))
-  //  ));
+  for (int i = 0; i < 8; ++i) {
+    float rand_x = std::rand()/((RAND_MAX + 1u)/20) - 10.0f;
+    float rand_y = 10;// + std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
+    float rand_z = std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
+    float rand_scale = 1 + std::rand()/((RAND_MAX + 1u)/3);
 
-  //w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<Physics::MonteCarlo<std::uniform_real_distribution<float>>>>(
-  //  w.objects().back().get(), 
-  //  Physics::MonteCarlo(std::uniform_real_distribution<float>(-1, 1)), 
-  //  Physics::MonteCarlo(std::uniform_real_distribution<float>(-1, 1)), 
-  //  Physics::MonteCarlo(std::uniform_real_distribution<float>(-1, 1))
-  //  ));
+    // TODO: make color table
+    rt::Material sphere_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+    w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(rand_x, rand_y, rand_z).scale(rand_scale, rand_scale, rand_scale), sphere_mat));
 
-  //w.objects()[0]->set_behavior(std::make_shared<Physics::RandomWalker<Physics::PerlinDistribution>>(
-  //  w.objects().back().get(), 
-  //  Physics::PerlinDistribution(0), 
-  //  Physics::PerlinDistribution(1000), 
-  //  Physics::PerlinDistribution(2000)
-  //  ));
+    // TODO: check why weak_ptr is not moving correctly
+    w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w.objects().back().get(), rand_scale));
+  }
 
-//  w.objects()[0]->set_behavior(std::make_shared<Physics::BouncingObject>(w.objects().back().get(), rt::Vector(-10, -8, -7), rt::Vector(10, 8, 7), rt::Vector(0.1f, 0.1f, 0.1f)));
-  //w.objects()[0]->set_behavior(std::make_shared<Physics::Mover>(w.objects().back().get(), rt::zero_vec, rt::Vector(0, -0.09f, 0)));
-  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w.objects().back().get()));
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+}
+
+void friction_box(rt::World& w) {
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
+  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -2, 0), floor_mat));
+
+  rt::Material cube_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(4, 2, 2).translate(-10, 0, 0), cube_mat));
+
+  // TODO: check why weak_ptr is not moving correctly
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w.objects().back().get(), 2, rt::Vector(1, 0, 0)));
 }
 
 int main(int argc, char* argv[])
@@ -195,7 +196,7 @@ int main(int argc, char* argv[])
   // Setup the world
   rt::World w;
 
-  load_world_4(w);
+  friction_box(w);
   w.setup();
 
   rt::Profiler p(true);
