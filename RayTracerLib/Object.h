@@ -41,6 +41,10 @@ namespace RayTracer {
       return normalize(w_n);
     }
 
+    std::shared_ptr<Physics::Behavior> behavior() {
+      return _behavior;
+    }
+
     void set_behavior(std::shared_ptr<Physics::Behavior> beh) {
       _behavior = beh;
     }

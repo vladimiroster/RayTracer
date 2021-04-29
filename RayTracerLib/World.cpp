@@ -132,7 +132,9 @@ namespace RayTracer {
 
   void World::act()
   {
+    _physics->act(_objects);
     for (auto obj : _objects) {
+      // Apply gravity
       obj->act();
     }
   }

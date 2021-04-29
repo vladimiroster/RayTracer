@@ -27,10 +27,13 @@
     <ClInclude Include="BouncingObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gravity.h">
+    <ClInclude Include="Mover.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mover.h">
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

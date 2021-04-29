@@ -161,7 +161,8 @@ void load_world_4(rt::World& w) {
   //  ));
 
 //  w.objects()[0]->set_behavior(std::make_shared<Physics::BouncingObject>(w.objects().back().get(), rt::Vector(-10, -8, -7), rt::Vector(10, 8, 7), rt::Vector(0.1f, 0.1f, 0.1f)));
-  w.objects()[0]->set_behavior(std::make_shared<Physics::Mover>(w.objects().back().get(), rt::zero_vec, rt::Vector(0, -0.09f, 0)));
+  //w.objects()[0]->set_behavior(std::make_shared<Physics::Mover>(w.objects().back().get(), rt::zero_vec, rt::Vector(0, -0.09f, 0)));
+  w.objects()[0]->set_behavior(std::make_shared<Physics::RigidBody>(w.objects().back().get()));
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 }
 

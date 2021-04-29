@@ -6,6 +6,8 @@
 #include "Object.h"
 #include "Lighting.h"
 
+#include "../PhysicsLib/Engine.h"
+
 namespace RayTracer {
 
   class World {
@@ -47,5 +49,6 @@ namespace RayTracer {
   private:
     std::vector<std::shared_ptr<Object>> _objects;
     std::vector<std::shared_ptr<Light>> _lights;
+    std::unique_ptr<Physics::Engine> _physics = std::make_unique<Physics::Engine>(Vector(0, -0.09f, 0));
   };
 } //namespace RayTracer
