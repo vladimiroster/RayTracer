@@ -18,6 +18,8 @@ using namespace std::chrono_literals;
 #include "../PhysicsLib/Distribution.h"
 #include "../PhysicsLib/BouncingObject.h"
 #include "../PhysicsLib/Mover.h"
+#include "../PhysicsLib/RigidBody.h"
+#include "../PhysicsLib/Engine.h"
 
 namespace rt = RayTracer;
 
@@ -195,6 +197,7 @@ int main(int argc, char* argv[])
 
   // Setup the world
   rt::World w;
+  std::unique_ptr<Physics::Engine> physics = std::make_unique<Physics::Engine>(w, rt::Vector(0, -0.098f, 0));
 
   friction_box(w);
   w.setup();
@@ -240,6 +243,7 @@ int main(int argc, char* argv[])
 
     {
       auto profile = p.profile("Physics");
+      physics->act();
       w.act();
     }
 

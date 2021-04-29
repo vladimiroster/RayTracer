@@ -5,6 +5,7 @@
 #include "RigidBody.h"
 
 #include "../RayTracerLib/Object.h"
+#include "../RayTracerLib/World.h"
 
 namespace rt = RayTracer;
 
@@ -12,10 +13,10 @@ namespace Physics {
 
   class Engine {
   public:
-    Engine(rt::Vector gravity = rt::zero_vec) : _g(gravity) {}
+    Engine(rt::World& world, rt::Vector gravity = rt::zero_vec) : _world(world), _g(gravity) {}
 
-    void act(std::vector<std::shared_ptr<rt::Object>> objects) {
-      for (auto obj : objects) {
+    void act() {
+      for (auto obj : _world.objects()) {
         for (auto b : obj->behaviors()) {
           auto rb = std::dynamic_pointer_cast<RigidBody>(b);
           if (!rb) {
@@ -28,13 +29,14 @@ namespace Physics {
           //rb->apply_force(rt::Vector(0.05f, 0, 0));
           
           // Friction
-          rb->apply_friction(0.1f, 1);
+          rb->apply_friction(0.2f, 1);
         }
       }
     }
 
   private:
     rt::Vector _g;
+    rt::World& _world;
   };
 
 } // namespace Physics
