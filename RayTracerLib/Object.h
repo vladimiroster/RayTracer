@@ -41,22 +41,18 @@ namespace RayTracer {
       return normalize(w_n);
     }
 
-    std::shared_ptr<Physics::Behavior> behavior() {
-      return _behavior;
-    }
-
-    void set_behavior(std::shared_ptr<Physics::Behavior> beh) {
-      _behavior = beh;
+    std::vector<std::shared_ptr<Physics::Behavior>>& behaviors() {
+      return _behaviors;
     }
 
     void setup() {
-      if (_behavior)
-        _behavior->setup();
+      for (auto b : _behaviors)
+        b->setup();
     }
 
     void act() {
-      if (_behavior)
-        _behavior->action();
+      for (auto b : _behaviors)
+        b->action();
     }
 
     void move(Transform transform) {
@@ -79,7 +75,7 @@ namespace RayTracer {
 
   protected:
     Material _material;
-    std::shared_ptr<Physics::Behavior> _behavior;
+    std::vector<std::shared_ptr<Physics::Behavior>> _behaviors;
   };
 
 } // namespace RayTracer

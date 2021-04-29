@@ -16,12 +16,14 @@ namespace Physics {
 
     void act(std::vector<std::shared_ptr<rt::Object>> objects) {
       for (auto obj : objects) {
-        auto rb = std::dynamic_pointer_cast<RigidBody>(obj->behavior());
-        if (!rb) {
-          continue;
+        for (auto b : obj->behaviors()) {
+          auto rb = std::dynamic_pointer_cast<RigidBody>(b);
+          if (!rb) {
+            continue;
+          }
+          // Apply gravity
+          rb->apply_force(_g);
         }
-        // Apply gravity
-        rb->apply_force(_g);
       }
     }
 
