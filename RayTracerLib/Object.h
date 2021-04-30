@@ -45,6 +45,10 @@ namespace RayTracer {
       return _behaviors;
     }
 
+    const std::vector<std::shared_ptr<Physics::Behavior>>& behaviors() const {
+      return _behaviors;
+    }
+
     void setup() {
       for (auto b : _behaviors)
         b->setup();
