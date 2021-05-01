@@ -22,14 +22,17 @@ namespace Physics {
           if (!rb) {
             continue;
           }
+
           // Apply gravity
-          //rb->apply_force(_g * rb->mass());
+          if (rb->obeys_gravity()) {
+            rb->apply_force(_g * rb->mass());
+          }
 
           // Apply wind
           //rb->apply_force(rt::Vector(0.05f, 0, 0));
           
           // Friction
-          rb->apply_friction(0.2f, 1);
+          //rb->apply_friction(0.2f, 1);
         }
       }
     }

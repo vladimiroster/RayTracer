@@ -20,6 +20,7 @@ using namespace std::chrono_literals;
 #include "../PhysicsLib/Mover.h"
 #include "../PhysicsLib/RigidBody.h"
 #include "../PhysicsLib/Engine.h"
+#include "../PhysicsLib/Liquid.h"
 
 namespace rt = RayTracer;
 
@@ -139,20 +140,43 @@ void load_world_3(rt::World& w) {
 void falling_spheres(rt::World& w) {
   rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
   w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -10, 0), floor_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 1000000000.0f, false));
 
-  for (int i = 0; i < 8; ++i) {
-    float rand_x = std::rand()/((RAND_MAX + 1u)/20) - 10.0f;
-    float rand_y = 10;// + std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
-    float rand_z = std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
-    float rand_scale = 1 + std::rand()/((RAND_MAX + 1u)/3);
+  //for (int i = 0; i < 3; ++i) {
+  //  float rand_x = std::rand()/((RAND_MAX + 1u)/16) - 8.0f;
+  //  float rand_y = 10;// + std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
+  //  float rand_z = std::rand()/((RAND_MAX + 1u)/5) - 2.5f;
+  //  float rand_scale = 1 + std::rand()/((RAND_MAX + 1u)/3);
 
-    // TODO: make color table
-    rt::Material sphere_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
-    w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(rand_x, rand_y, rand_z).scale(rand_scale, rand_scale, rand_scale), sphere_mat));
+  //  // TODO: make color table
+  //  rt::Material sphere_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  //  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(rand_scale, rand_scale, rand_scale).translate(rand_x, rand_y, rand_z), sphere_mat));
 
-    // TODO: check why weak_ptr is not moving correctly
-    w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w.objects().back().get(), rand_scale));
-  }
+  //  // TODO: check why weak_ptr is not moving correctly
+  //  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), rand_scale));
+  //}
+
+  // Sphere 1
+  rt::Material sphere1_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-6, 10, -2), sphere1_mat));
+  // TODO: check why weak_ptr is not moving correctly
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 1));
+
+  rt::Material sphere3_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(-10, 15, -2), sphere3_mat));
+  // TODO: check why weak_ptr is not moving correctly
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 1));
+
+  // Sphere 2
+  rt::Material sphere2_mat(rt::Color(0.2f, 0.8f, 0.2f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(6, 10, -2).scale(2, 2, 2), sphere2_mat));
+  // TODO: check why weak_ptr is not moving correctly
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2));
+
+  // Transparent liquid box
+  rt::Material box_mat(rt::white, 0.1f, 0.9f, 0, 0, 0, 1, 1.5);
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(5, 5, 5).translate(-8, 3, 0), box_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::Liquid>(w, w.objects().back().get(), 1));
 
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 }
@@ -166,7 +190,7 @@ void friction_box(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(4, 2, 2).translate(-10, 0, 0), cube_mat));
 
   // TODO: check why weak_ptr is not moving correctly
-  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w.objects().back().get(), 2, rt::Vector(1, 0, 0)));
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, false, rt::Vector(1, 0, 0)));
 }
 
 int main(int argc, char* argv[])
@@ -199,7 +223,8 @@ int main(int argc, char* argv[])
   rt::World w;
   std::unique_ptr<Physics::Engine> physics = std::make_unique<Physics::Engine>(w, rt::Vector(0, -0.098f, 0));
 
-  friction_box(w);
+  falling_spheres(w);
+  //friction_box(w);
   w.setup();
 
   rt::Profiler p(true);
