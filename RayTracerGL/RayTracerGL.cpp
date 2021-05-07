@@ -6,6 +6,7 @@ using namespace std::chrono_literals;
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <thread>
 
 #include "../RayTracerLib/World.h"
 #include "../RayTracerLib/Sphere.h"

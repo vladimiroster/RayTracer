@@ -28,9 +28,6 @@ namespace Physics {
       _acceleration = _acceleration + force;
 
       // TODO: model bouncing with a spring force
-
-      // TODO: Add second ball different height to liquid
-
     }
 
     bool obeys_gravity() const {
@@ -52,7 +49,8 @@ namespace Physics {
       // TODO: drag with surface area
       // TODO: lift induced drag (wing rise)
       auto speed = rt::magnitude(_velocity);
-      apply_force(rt::normalize(_velocity) * c * speed * speed * (-1));
+      auto force_mag = std::min(c * speed * speed, speed);
+      apply_force(rt::normalize(_velocity) * force_mag * (-1));
     }
 
   private:
