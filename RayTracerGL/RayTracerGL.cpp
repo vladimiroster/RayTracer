@@ -139,8 +139,9 @@ void load_world_3(rt::World& w) {
 // Spheres falling with gravity and wind
 void falling_spheres(rt::World& w) {
   rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
-  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -10, 0), floor_mat));
-  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 1000000000.0f, false));
+//  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -10, 0), floor_mat));
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(1000, 1000, 1000).translate(0, -1010, 0), floor_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f, true));
 
   //for (int i = 0; i < 3; ++i) {
   //  float rand_x = std::rand()/((RAND_MAX + 1u)/16) - 8.0f;
@@ -221,7 +222,7 @@ int main(int argc, char* argv[])
 
   // Setup the world
   rt::World w;
-  std::unique_ptr<Physics::Engine> physics = std::make_unique<Physics::Engine>(w, rt::Vector(0, -0.098f, 0));
+  std::unique_ptr<Physics::Engine> physics = std::make_unique<Physics::Engine>(w, 1e-8);
 
   falling_spheres(w);
   //friction_box(w);

@@ -13,7 +13,7 @@ namespace Physics {
 
   class Engine {
   public:
-    Engine(rt::World& world, rt::Vector gravity = rt::zero_vec) : _world(world), _g(gravity) {}
+    Engine(rt::World& world, float gravity = 1) : _world(world), _g(gravity) {}
 
     void act() {
       for (auto obj : _world.objects()) {
@@ -23,9 +23,26 @@ namespace Physics {
             continue;
           }
 
-          // Apply gravity
-          if (rb->obeys_gravity()) {
-            rb->apply_force(_g * rb->mass());
+          for (auto obj2 : _world.objects()) {
+            if (obj2 == obj) {
+              continue;
+            }
+            for (auto b2 : obj2->behaviors()) {
+              auto rb2 = std::dynamic_pointer_cast<RigidBody>(b2);
+              if (!rb2) {
+                continue;
+              }
+
+              // Apply gravity
+              if (rb->obeys_gravity() && rb2->obeys_gravity()) {
+                rt::Vector force = rb->location() - rb2->location();
+                auto distance = rt::magnitude(force);
+                float m = (_g * rb->mass() * rb2->mass()) / (distance * distance + rt::epsilon);
+                force = rt::normalize(force) * m;
+                rb->apply_force(force * -1.0f);
+                rb2->apply_force(force);
+              }
+            }
           }
 
           // Apply wind
@@ -38,7 +55,8 @@ namespace Physics {
     }
 
   private:
-    rt::Vector _g;
+    //rt::Vector _g;
+    float _g;
     rt::World& _world;
   };
 
