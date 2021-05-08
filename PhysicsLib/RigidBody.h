@@ -15,8 +15,8 @@ namespace Physics {
 
   class RigidBody : public Collidable {
   public:
-    RigidBody(rt::World& w, rt::Object* obj, float mass, bool obeys_gravity = true, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec) 
-      : Collidable(w, obj, mass, velocity, acceleration), _obeys_gravity(obeys_gravity) {}
+    RigidBody(rt::World& w, rt::Object* obj, float mass, bool obeys_gravity = true, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec, rt::Vector aVelocity = rt::zero_vec, rt::Vector aAcceleration = rt::zero_vec) 
+      : Collidable(w, obj, mass, velocity, acceleration, aVelocity, aAcceleration), _obeys_gravity(obeys_gravity) {}
 
     virtual void setup() override {}
 

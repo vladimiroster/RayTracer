@@ -16,8 +16,8 @@ namespace Physics {
 
   class Collidable : public Behavior {
   public:
-    Collidable(rt::World& w, rt::Object* obj, float mass, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec) 
-      : _world(w), _obj(obj), _mass(mass), _velocity(velocity), _acceleration(acceleration) {}
+    Collidable(rt::World& w, rt::Object* obj, float mass, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec, rt::Vector aVelocity = rt::zero_vec, rt::Vector aAcceleration = rt::zero_vec) 
+      : _world(w), _obj(obj), _mass(mass), _velocity(velocity), _acceleration(acceleration), _aVelocity(aVelocity), _aAcceleration(aAcceleration) {}
 
     rt::Point location() const {
       auto transform = _obj->transform();
@@ -42,12 +42,14 @@ namespace Physics {
     virtual void apply_force(rt::Vector force) = 0;
 
   protected:
-    // TODO: world should be here (or in RB for that matter)
+    // TODO: world should not be here (or in RB for that matter)
     rt::World& _world;
     rt::Object* _obj;
     float _mass;
     rt::Vector _velocity;
     rt::Vector _acceleration;
+    rt::Vector _aVelocity;
+    rt::Vector _aAcceleration;
   };
 
 } // namespace Physics
