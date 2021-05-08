@@ -35,10 +35,15 @@ float FOV = 3.14159f / 3; //3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
 
+bool gPlayMode = false;
+
 void process_input(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   if (action == GLFW_PRESS) {
     switch (key) {
+    case GLFW_KEY_SPACE:
+      gPlayMode = !gPlayMode;
+      break;
     case GLFW_KEY_KP_SUBTRACT:
       FOV += MOVE_DELTA;
       break;
@@ -268,7 +273,7 @@ int main(int argc, char* argv[])
 
     std::cerr << "Frame: " << frame_num << ", frame in second: " << fps_num << ", FPS: " << fps << "\n";
 
-    {
+    if (gPlayMode) {
       auto profile = p.profile("Physics");
       physics->act();
       w.act();
