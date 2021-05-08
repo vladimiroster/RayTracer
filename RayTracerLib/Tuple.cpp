@@ -81,4 +81,14 @@ namespace RayTracer {
   {
     return in - normal * 2 * dot(in, normal);
   }
+  Vector carthesian(const Vector & in)
+  {
+    // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+    return Vector(in.x * cosf(in.y) * sinf(in.z), in.x * sinf(in.z) * sinf(in.y), in.x * cosf(in.z));
+  }
+  Vector spherical(const Vector & in)
+  {
+    auto r = sqrtf(in.x * in.x + in.y * in.y + in.z * in.z);
+    return Vector(r, atan2f(in.y, in.x), acosf(in.z/r));
+  }
 } // namespace RayTracer

@@ -76,5 +76,7 @@ namespace RayTracer {
   // Hadamard product (Schur product)
   Color operator*(const Color& lhs, const Color& rhs);
   Vector reflect(const Vector& in, const Vector& normal);
+  Vector carthesian(const Vector& in);
+  Vector spherical(const Vector& in);
 
 } // namespace RayTracer

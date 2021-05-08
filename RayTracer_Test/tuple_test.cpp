@@ -172,3 +172,10 @@ TEST(TestTuple, TestReflectSlanted) {
   auto r = reflect(v, n);
   EXPECT_EQ(Vector(1, 0, 0), r);
 }
+
+TEST(TestTuple, TestCarthesianSpherical) {
+  Vector v(3, 4, 5);
+  auto sph = spherical(v);
+  auto cart = carthesian(sph);
+  ASSERT_EQ(v, cart);
+}
