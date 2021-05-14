@@ -232,6 +232,14 @@ void rotating_box(rt::World& w) {
   w.objects()[0]->behaviors().push_back(gInputSystems.back());
 }
 
+void oscilation(rt::World& w) {
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+  rt::Material cube_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 8, 0), cube_mat));
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::HarmonicMover>(w.objects().back().get(), 10, 60, rt::Vector(1, 0.5, 0)));
+
+}
+
 int main(int argc, char* argv[])
 {
   GLFWwindow* window;
@@ -264,7 +272,8 @@ int main(int argc, char* argv[])
 
   //falling_spheres(w);
   //friction_box(w);
-  rotating_box(w);
+  //rotating_box(w);
+  oscilation(w);
   w.setup();
 
   rt::Profiler p(true);

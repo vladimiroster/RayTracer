@@ -74,6 +74,7 @@ namespace RayTracer {
     virtual Vector normal_local(const Point& r) const = 0;
 
   private:
+    // TODO: To allow rotation and scaling in later time, separate this into TRS values
     Transform _transform;
     Transform _inverse;
 
