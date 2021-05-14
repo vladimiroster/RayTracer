@@ -48,7 +48,7 @@ namespace Physics {
       _acceleration = rt::zero_vec;
 
       _aVelocity = _aVelocity + _aAcceleration;
-      _obj->move(rt::Transform::id().rot_z(_aVelocity.z) * rt::Transform::id().rot_y(_aVelocity.y) * rt::Transform::id().rot_x(_aVelocity.x) * _obj->transform());
+      _obj->move(_obj->transform() * rt::Transform::id().rot_z(_aVelocity.z) * rt::Transform::id().rot_y(_aVelocity.y) * rt::Transform::id().rot_x(_aVelocity.x));
       _aAcceleration = rt::zero_vec;
     }
   }

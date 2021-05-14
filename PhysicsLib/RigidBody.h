@@ -30,6 +30,21 @@ namespace Physics {
       // TODO: model bouncing with a spring force
     }
 
+    void apply_local_force(rt::Vector force) {
+      rt::Vector local_force = _obj->transform() * force;
+      apply_force(local_force);
+    }
+
+    void apply_angular_force(rt::Vector aForce) {
+      aForce = aForce / _mass;
+      _aAcceleration = _aAcceleration + aForce;
+    }
+
+    void apply_local_angular_force(rt::Vector aForce) {
+     // aForce = _obj->inverse() * aForce;
+      apply_angular_force(aForce);
+    }
+
     bool obeys_gravity() const {
       return _obeys_gravity;
     }
@@ -48,9 +63,14 @@ namespace Physics {
     void apply_drag(float c) {
       // TODO: drag with surface area
       // TODO: lift induced drag (wing rise)
+      // Linear drag
       auto speed = rt::magnitude(_velocity);
       auto force_mag = std::min(c * speed * speed, speed);
       apply_force(rt::normalize(_velocity) * force_mag * (-1));
+      // Angular drag
+      speed = rt::magnitude(_aVelocity);
+      force_mag = std::min(c * speed * speed, speed);
+      apply_angular_force(rt::normalize(_aVelocity) * force_mag * (-1));
     }
 
   private:

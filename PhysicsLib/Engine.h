@@ -50,6 +50,9 @@ namespace Physics {
           
           // Friction
           //rb->apply_friction(0.2f, 1);
+
+          // Air drag
+          rb->apply_drag(0.8);
         }
       }
     }

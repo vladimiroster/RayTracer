@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "Behavior.h"
 #include "RigidBody.h"
 

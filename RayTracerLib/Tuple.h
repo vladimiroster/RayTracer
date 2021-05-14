@@ -45,6 +45,7 @@ namespace RayTracer {
   };
 
   struct Vector : public Tuple {
+    Vector() : Vector(0, 0, 0) {}
     Vector(float x1, float y1, float z1) : Tuple(x1, y1, z1, 0.0f) {}
     Vector(Tuple&& t) : Vector(t.x, t.y, t.z) {}
   };

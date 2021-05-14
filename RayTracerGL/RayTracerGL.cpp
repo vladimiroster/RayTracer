@@ -22,6 +22,7 @@ using namespace std::chrono_literals;
 #include "../PhysicsLib/RigidBody.h"
 #include "../PhysicsLib/Engine.h"
 #include "../PhysicsLib/Liquid.h"
+#include "../PhysicsLib/InputSystem.h"
 
 namespace rt = RayTracer;
 
@@ -36,10 +37,14 @@ float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
 
 bool gPlayMode = false;
+std::vector<std::shared_ptr<Physics::InputSystem>> gInputSystems;
 
 void process_input(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
   if (action == GLFW_PRESS) {
+    for (auto is : gInputSystems) {
+      is->keyPress(key);
+    }
     switch (key) {
     case GLFW_KEY_SPACE:
       gPlayMode = !gPlayMode;
@@ -78,6 +83,11 @@ void process_input(GLFWwindow* window, int key, int scancode, int action, int mo
       of << *canvas;
       std::cout << "Done writing frame\n";
       break;
+    }
+  }
+  else if (action == GLFW_RELEASE) {
+    for (auto is : gInputSystems) {
+      is->keyRelease(key);
     }
   }
 }
@@ -206,10 +216,20 @@ void rotating_box(rt::World& w) {
 //  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -2, 0), floor_mat));
 
   rt::Material cube_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
-  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(4, 2, 2).translate(0, 0, 0), cube_mat));
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 8, 0), cube_mat)); //.scale(2, 4, 2)
 
   // TODO: check why weak_ptr is not moving correctly
-  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, false, rt::Vector(0.2f, -0.2f, 0.2f), rt::zero_vec, rt::Vector(0.12f, 0, 0.25f), rt::zero_vec));
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, false)); //, rt::Vector(0.2f, -0.2f, 0.2f), rt::zero_vec, rt::Vector(0.12f, 0, 0.25f), rt::zero_vec));
+  std::map<int, rt::Vector> linearKeyMap;
+  linearKeyMap[GLFW_KEY_W] = rt::Vector(0, 0.25, 0);
+  linearKeyMap[GLFW_KEY_S] = rt::Vector(0, -0.25, 0);
+  gInputSystems.emplace_back(std::make_shared<Physics::LinearInputSystem>(w.objects().back().get(), linearKeyMap));
+  w.objects()[0]->behaviors().push_back(gInputSystems.back());
+  std::map<int, rt::Vector> angularKeyMap;
+  angularKeyMap[GLFW_KEY_A] = rt::Vector(0, 0, 0.01);
+  angularKeyMap[GLFW_KEY_D] = rt::Vector(0, 0, -0.01);
+  gInputSystems.emplace_back(std::make_shared<Physics::AngularInputSystem>(w.objects().back().get(), angularKeyMap));
+  w.objects()[0]->behaviors().push_back(gInputSystems.back());
 }
 
 int main(int argc, char* argv[])
