@@ -161,6 +161,7 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Liquid.h" />
     <ClInclude Include="Mover.h" />
+    <ClInclude Include="Pendulum.h" />
     <ClInclude Include="RandomWalker.h" />
     <ClInclude Include="RigidBody.h" />
   </ItemGroup>

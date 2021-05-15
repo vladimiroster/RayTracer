@@ -79,5 +79,6 @@ namespace RayTracer {
   Vector reflect(const Vector& in, const Vector& normal);
   Vector carthesian(const Vector& in);
   Vector spherical(const Vector& in);
+  Vector sin(const Vector& in);
 
 } // namespace RayTracer

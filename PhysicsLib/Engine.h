@@ -52,7 +52,7 @@ namespace Physics {
           //rb->apply_friction(0.2f, 1);
 
           // Air drag
-          rb->apply_drag(0.8);
+          rb->apply_drag(0.8f);
         }
       }
     }

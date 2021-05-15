@@ -31,7 +31,7 @@ namespace Physics {
         if ((loc.z > _c2.z) || (loc.z < _c1.z)) {
           _speed.z *= -1;
         }
-        rt::Vector v = _speed + rt::Vector(1, 1, 1) * rt::magnitude(_speed) * 0.5f * _noise.noise(loc.x, loc.y, loc.z);
+        rt::Vector v = _speed + rt::Vector(1, 1, 1) * rt::magnitude(_speed) * 0.5f * static_cast<float>(_noise.noise(loc.x, loc.y, loc.z));
         _obj->move(transform * rt::Transform::id().translate(v));
       }
     }

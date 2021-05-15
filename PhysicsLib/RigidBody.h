@@ -55,8 +55,8 @@ namespace Physics {
     }
 
     void apply_friction(float mu, float N) {
+      // TODO: friction on an incline
       rt::Vector friction = rt::normalize(_velocity) * (-1) * mu * N;
-      std::cout << "Applying friction: " << friction << "(" << _velocity << ", " << rt::normalize(_velocity) << ")" << std::endl;
       apply_force(friction);
     }
 
