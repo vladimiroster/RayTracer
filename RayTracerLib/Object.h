@@ -59,8 +59,9 @@ namespace RayTracer {
     }
 
     void act() {
-      for (auto b : _behaviors)
+      for (auto b : _behaviors) {
         _alive &= b->action();
+      }
     }
 
     void move(Transform transform) {
