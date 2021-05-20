@@ -24,6 +24,8 @@ using namespace std::chrono_literals;
 #include "../PhysicsLib/Liquid.h"
 #include "../PhysicsLib/InputSystem.h"
 #include "../PhysicsLib/Pendulum.h"
+#include "../PhysicsLib/Spring.h"
+#include "../PhysicsLib/Particle.h"
 
 namespace rt = RayTracer;
 
@@ -32,7 +34,7 @@ rt::Point FROM(0, 1.5f, -50);
 rt::Point TO(0, 1, 0);
 rt::Vector UP(0, 1, 0);
 // Away is +z
-auto res = rt::Camera::RES_640X480;
+auto res = rt::Camera::RES_640X480;  //rt::Camera::RES_TINY;
 float FOV = 3.14159f / 3; //3.14159f / 3.0f;
 float MOVE_DELTA = 0.1f;
 std::unique_ptr<rt::Canvas> canvas;
@@ -158,7 +160,7 @@ void falling_spheres(rt::World& w) {
   rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
 //  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -10, 0), floor_mat));
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(1000, 1000, 1000).translate(0, -1010, 0), floor_mat));
-  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f, true));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f));
 
   //for (int i = 0; i < 3; ++i) {
   //  float rand_x = std::rand()/((RAND_MAX + 1u)/16) - 8.0f;
@@ -208,10 +210,32 @@ void friction_box(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().scale(4, 2, 2).translate(-10, 0, 0), cube_mat));
 
   // TODO: check why weak_ptr is not moving correctly
-  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, false, rt::Vector(1, 0, 0)));
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, rt::Vector(1, 0, 0), rt::zero_vec, rt::zero_vec, rt::zero_vec, false));
 }
 
-void rotating_box(rt::World& w) {
+class AsteroidsInputSystem : public Physics::LinearInputSystem {
+public:
+  AsteroidsInputSystem(rt::Object* obj, const std::map<int, rt::Vector>& keyMap, rt::World& w) :
+    LinearInputSystem(obj, keyMap), _system(w, 3) {};
+
+protected:
+  virtual void local_action() override {
+    LinearInputSystem::local_action();
+    auto accel = _rb->acceleration();
+    if (rt::magnitude(accel) > 0) {
+      rt::Vector dir = rt::normalize(accel);
+      if (_test) {
+        _system.emit(_rb->location(), dir * -1);
+        //_test = false;
+      }
+    }
+  }
+
+  Physics::ParticleSystem _system;
+  bool _test = true;
+};
+
+void asteroids(rt::World& w) {
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
 //  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
 //  w.objects().emplace_back(std::make_shared<rt::Plane>(rt::Transform::id().translate(0, -2, 0), floor_mat));
@@ -220,11 +244,11 @@ void rotating_box(rt::World& w) {
   w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 8, 0), cube_mat)); //.scale(2, 4, 2)
 
   // TODO: check why weak_ptr is not moving correctly
-  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, false)); //, rt::Vector(0.2f, -0.2f, 0.2f), rt::zero_vec, rt::Vector(0.12f, 0, 0.25f), rt::zero_vec));
+  w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f, rt::zero_vec, rt::zero_vec, rt::zero_vec, rt::zero_vec, false)); //, rt::Vector(0.2f, -0.2f, 0.2f), rt::zero_vec, rt::Vector(0.12f, 0, 0.25f), rt::zero_vec));
   std::map<int, rt::Vector> linearKeyMap;
   linearKeyMap[GLFW_KEY_W] = rt::Vector(0, 0.25f, 0);
   linearKeyMap[GLFW_KEY_S] = rt::Vector(0, -0.25f, 0);
-  gInputSystems.emplace_back(std::make_shared<Physics::LinearInputSystem>(w.objects().back().get(), linearKeyMap));
+  gInputSystems.emplace_back(std::make_shared<AsteroidsInputSystem>(w.objects().back().get(), linearKeyMap, w));
   w.objects()[0]->behaviors().push_back(gInputSystems.back());
   std::map<int, rt::Vector> angularKeyMap;
   angularKeyMap[GLFW_KEY_A] = rt::Vector(0, 0, 0.01f);
@@ -236,9 +260,37 @@ void rotating_box(rt::World& w) {
 void oscilation(rt::World& w) {
   w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
   rt::Material cube_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
-  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(0, 4, 0), cube_mat));
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(0, 15, 0), cube_mat));
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(6, 4, 0), cube_mat));
   //w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::HarmonicMover>(w.objects().back().get(), 10, 60, rt::Vector(1, 0.5, 0)));
   w.objects()[0]->behaviors().emplace_back(std::make_shared<Physics::Pendulum>(w.objects().back().get(), 3.1415f / 2, rt::Point(0, 8, 0), 5.0f, 0.10f));
+}
+
+void springs(rt::World& w) {
+  // TODO: physics based pendulum and spring force (chapter 3)
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+  rt::Material cube_mat(rt::Color(1, 0.8f, 0.1f), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().translate(0, 15, 0), cube_mat));
+
+  // Pendulum cube
+  w.objects().emplace_back(std::make_shared<rt::Cube>(rt::Transform::id().translate(6, 4, 0), cube_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 2.0f));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::Spring>(w.objects()[1].get(), w.objects()[0].get(), 0.01f));
+
+  // Earth
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(1000, 1000, 1000).translate(0, -1010, 0), floor_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f));
+}
+
+void particles(rt::World& w) {
+  w.lights().emplace_back(std::make_shared<rt::Light>(rt::Color(1, 1, 1), rt::Point(-10, 10, -10)));
+
+  // Earth
+  rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
+  w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(1000, 1000, 1000).translate(0, -1010, 0), floor_mat));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::ParticleSystem>(w, 5));
 }
 
 int main(int argc, char* argv[])
@@ -273,8 +325,10 @@ int main(int argc, char* argv[])
 
   //falling_spheres(w);
   //friction_box(w);
-  //rotating_box(w);
-  oscilation(w);
+  //oscilation(w);
+  //springs(w);
+  asteroids(w);
+  //particles(w);
   w.setup();
 
   rt::Profiler p(true);

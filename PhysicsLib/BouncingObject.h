@@ -16,7 +16,7 @@ namespace Physics {
 
     virtual void setup() override {}
 
-    virtual void action() override {
+    virtual bool action() override {
       if (_obj) {
         auto transform = _obj->transform();
         // TODO: make that intersection with objects - receive a bunch of objects, cast rays to all of them, and reflect if xs time is < delta
@@ -34,6 +34,8 @@ namespace Physics {
         rt::Vector v = _speed + rt::Vector(1, 1, 1) * rt::magnitude(_speed) * 0.5f * static_cast<float>(_noise.noise(loc.x, loc.y, loc.z));
         _obj->move(transform * rt::Transform::id().translate(v));
       }
+
+      return true;
     }
 
   private:

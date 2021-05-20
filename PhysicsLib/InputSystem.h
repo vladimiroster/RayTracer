@@ -27,10 +27,12 @@ namespace Physics {
 
     virtual void setup() override {}
 
-    virtual void action() override {
+    virtual bool action() override {
       if (_keys.size() > 0) {
         local_action();
       }
+
+      return true;
     }
 
     void keyPress(int key) {
@@ -56,7 +58,7 @@ namespace Physics {
     LinearInputSystem(rt::Object* obj, const std::map<int, rt::Vector>& keyMap) :
       InputSystem(obj, keyMap) {};
 
-  private:
+  protected:
     virtual void local_action() override {
       for (auto k : _keys) {
         auto it = _keyMap.find(k);
@@ -70,7 +72,7 @@ namespace Physics {
   public:
     AngularInputSystem(rt::Object* obj, const std::map<int, rt::Vector>& keyMap) :
       InputSystem(obj, keyMap) {};
-  private:
+  protected:
     virtual void local_action() override {
       for (auto k : _keys) {
         auto it = _keyMap.find(k);

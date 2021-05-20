@@ -15,19 +15,19 @@ namespace Physics {
 
   class RigidBody : public Collidable {
   public:
-    RigidBody(rt::World& w, rt::Object* obj, float mass, bool obeys_gravity = true, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec, rt::Vector aVelocity = rt::zero_vec, rt::Vector aAcceleration = rt::zero_vec) 
+    RigidBody(rt::World& w, rt::Object* obj, float mass, rt::Vector velocity = rt::zero_vec, rt::Vector acceleration = rt::zero_vec, rt::Vector aVelocity = rt::zero_vec, rt::Vector aAcceleration = rt::zero_vec, bool obeys_gravity = true) 
       : Collidable(w, obj, mass, velocity, acceleration, aVelocity, aAcceleration), _obeys_gravity(obeys_gravity) {}
 
     virtual void setup() override {}
 
-    virtual void action() override;
+    virtual bool action() override;
 
     virtual void apply_force(rt::Vector force) override {
       force = force / _mass;
       // TODO: implement += for vectors
       _acceleration = _acceleration + force;
 
-      // TODO: model bouncing with a spring force
+      // TODO: model bouncing with a spring force (chapter 3)
     }
 
     void apply_local_force(rt::Vector force) {

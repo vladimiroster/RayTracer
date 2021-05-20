@@ -35,6 +35,10 @@ namespace Physics {
       return _acceleration;
     }
 
+    rt::Vector force() const {
+      return _force;
+    }
+
     virtual void collide(Collidable& other) = 0;
 
     virtual void apply_force(rt::Vector force) = 0;
@@ -48,6 +52,8 @@ namespace Physics {
     rt::Vector _acceleration;
     rt::Vector _aVelocity;
     rt::Vector _aAcceleration;
+    // Sum all forces that were acted upon each frame
+    rt::Vector _force;
   };
 
 } // namespace Physics

@@ -6,7 +6,7 @@
 
 namespace Physics {
 
-  void RigidBody::action() {
+  bool RigidBody::action() {
     if (_obj) {
       // Check for collisions
       auto new_vel = _velocity + _acceleration;
@@ -45,12 +45,15 @@ namespace Physics {
 
       _velocity = _velocity + _acceleration;
       _obj->move(rt::Transform::id().translate(_velocity) * _obj->transform());
+      _force = _acceleration;
       _acceleration = rt::zero_vec;
 
       _aVelocity = _aVelocity + _aAcceleration;
       _obj->move(_obj->transform() * rt::Transform::id().rot_z(_aVelocity.z) * rt::Transform::id().rot_y(_aVelocity.y) * rt::Transform::id().rot_x(_aVelocity.x));
       _aAcceleration = rt::zero_vec;
+
     }
+    return true;
   }
 
 } // namespace Physics

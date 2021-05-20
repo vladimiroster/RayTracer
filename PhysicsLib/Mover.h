@@ -15,11 +15,13 @@ namespace Physics {
 
     virtual void setup() override {}
 
-    virtual void action() override {
+    virtual bool action() override {
       if (_obj) {
         move();
         ++_t;
       }
+
+      return true;
     }
 
     virtual void move() = 0;

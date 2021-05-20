@@ -1,5 +1,7 @@
 #include "World.h"
 
+#include <algorithm>
+
 #include "Sphere.h"
 #include "Ray.h"
 
@@ -132,10 +134,12 @@ namespace RayTracer {
 
   void World::act()
   {
-    for (auto obj : _objects) {
-      // Apply gravity
-      obj->act();
+    for (size_t i = 0; i < _objects.size(); ++i) {
+      _objects[i]->act();
     }
+    _objects.erase(std::remove_if(_objects.begin(), _objects.end(), [](const std::shared_ptr<Object>& obj) {
+      return !obj->isAlive();
+    }), _objects.end());
   }
 
 } //namespace RayTracer

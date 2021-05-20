@@ -15,7 +15,7 @@ namespace Physics {
 
     virtual void setup() override {}
 
-    virtual void action() override {
+    virtual bool action() override {
       if (_obj) {
         _aAcceleration = sin(_angle) * -_g / _r;
         _aVelocity = _aVelocity + _aAcceleration;
@@ -27,6 +27,7 @@ namespace Physics {
         rt::Vector loc = _origin + rt::carthesian(location);
         _obj->move(rt::Transform::id().translate(loc));
       }
+      return true;
     }
 
   protected:

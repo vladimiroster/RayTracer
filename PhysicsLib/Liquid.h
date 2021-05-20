@@ -19,11 +19,13 @@ namespace Physics {
 
     virtual void setup() override {}
 
-    virtual void action() override {
+    virtual bool action() override {
       // Apply drag on all RBs inside
       for (auto floater : _floaters) {
         floater->apply_drag(_c);
       }
+
+      return true;
     }
 
     rt::Point location() const {

@@ -12,6 +12,10 @@ namespace RayTracer {
   public:
     Object(Transform t = Transform::id(), Material m = Material()) : _transform(t), _inverse(t.inverse()), _material(m) {}
 
+    virtual ~Object() {
+      std::cout << "Object is destroyed" << std::endl;
+    }
+
     const Transform &transform() const {
       return _transform;
     }
@@ -56,13 +60,17 @@ namespace RayTracer {
 
     void act() {
       for (auto b : _behaviors)
-        b->action();
+        _alive &= b->action();
     }
 
     void move(Transform transform) {
       // TODO: better way to do this?
       _transform = transform;
       _inverse = _transform.inverse();
+    }
+
+    bool isAlive() {
+      return _alive;
     }
 
     // TODO: add virtual compare method for specific derived class comparisons
@@ -77,6 +85,8 @@ namespace RayTracer {
     // TODO: To allow rotation and scaling in later time, separate this into TRS values
     Transform _transform;
     Transform _inverse;
+
+    bool _alive = true;
 
   protected:
     Material _material;
