@@ -12,9 +12,7 @@ namespace RayTracer {
   public:
     Object(Transform t = Transform::id(), Material m = Material()) : _transform(t), _inverse(t.inverse()), _material(m) {}
 
-    virtual ~Object() {
-      std::cout << "Object is destroyed" << std::endl;
-    }
+    virtual ~Object() { }
 
     const Transform &transform() const {
       return _transform;

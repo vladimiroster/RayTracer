@@ -24,7 +24,7 @@ namespace Physics {
           // Distance between front of the object and next object
           auto dist = (it+1)->time() - it->time();
 
-          std::cout << dist << ", " << rt::magnitude(new_vel) << std::endl;
+          //std::cout << dist << ", " << rt::magnitude(new_vel) << std::endl;
 
           // If next step is going to overshoot
           if (dist <= rt::magnitude(new_vel)) {

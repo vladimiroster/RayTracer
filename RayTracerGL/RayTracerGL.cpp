@@ -216,7 +216,7 @@ void friction_box(rt::World& w) {
 class AsteroidsInputSystem : public Physics::LinearInputSystem {
 public:
   AsteroidsInputSystem(rt::Object* obj, const std::map<int, rt::Vector>& keyMap, rt::World& w) :
-    LinearInputSystem(obj, keyMap), _system(w, 3) {};
+    LinearInputSystem(obj, keyMap), _system(w, 3, rt::Vector(1, 1, 0), rt::Color(0.1f, 0.8f, 1)) {};
 
 protected:
   virtual void local_action() override {
@@ -248,9 +248,9 @@ public:
 
   virtual void collide(Collidable& other) override {
     if (_alive) {
-      Physics::ParticleSystem system(_world, 3);
+      Physics::ParticleSystem system(_world, 30, rt::Vector(2, 2, 0), rt::Color(1, 0, 0));
 
-      system.emit(location(), rt::Vector(0, 1, 0));
+      system.emit(location(), rt::Vector(0, 0, 0));
     }
     _alive = false;
   }
@@ -324,7 +324,7 @@ void particles(rt::World& w) {
   rt::Material floor_mat(rt::Color(80.0f / 255, 5.0f / 255, 94.0f/255), 0.1f, 0.9f, 0, 0, 0, 0, 1.5);
   w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(1000, 1000, 1000).translate(0, -1010, 0), floor_mat));
   w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::RigidBody>(w, w.objects().back().get(), 10000000000000.0f));
-  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::ParticleSystem>(w, 5));
+  w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::ParticleSystem>(w, 5, rt::zero_vec, rt::Color(0, 0, 1)));
 }
 
 int main(int argc, char* argv[])

@@ -41,7 +41,8 @@ namespace Physics {
   // TODO: maybe this doesn't need to be behavior at all
   class ParticleSystem : public Behavior {
   public:
-    ParticleSystem(rt::World& w, size_t num) : _w(w), _num(num) { // TODO: pass material, object type, etc
+    ParticleSystem(rt::World& w, size_t num, rt::Vector spread, rt::Color color) : _w(w), _num(num), _spread(spread), _color(color) { // TODO: pass material, object type, etc
+      std::srand(std::time(nullptr));
     }
 
     virtual void setup() override {
@@ -53,16 +54,21 @@ namespace Physics {
     }
 
     void emit(rt::Vector origin, rt::Vector direction) {
-      rt::Material cube_mat(rt::Color(0.1f, 0.8f, 1), 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
+      rt::Material particle_mat(_color, 0.1f, 0.7f, 0.3f, 200, 1, 0, 1);
       for (auto i = 0; i < _num; ++i) {
-        _w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(origin), cube_mat));
-        _w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::Particle>(_w, _w.objects().back().get(), 2.0f, direction, rt::zero_vec, rt::zero_vec, rt::zero_vec, true, i + 8));
+        _w.objects().emplace_back(std::make_shared<rt::Sphere>(rt::Transform::id().scale(0.33f, 0.33f, 0.33f).translate(origin), particle_mat));
+        // TODO: have spread go by angle and better random number generation
+        rt::Vector r = rt::Vector(std::rand() / (float)RAND_MAX * _spread.x, std::rand() / (float)RAND_MAX * _spread.y, std::rand() / (float)RAND_MAX * _spread.z );
+        rt::Vector p_dir = direction - _spread / 2 + r;
+        _w.objects().back()->behaviors().emplace_back(std::make_shared<Physics::Particle>(_w, _w.objects().back().get(), 2.0f, p_dir, rt::zero_vec, rt::zero_vec, rt::zero_vec, true, i + 8));
       }
     }
 
   private:
     size_t _num;
     rt::World& _w;
+    rt::Vector _spread;
+    rt::Color _color;
   };
 
 } // namespace Physics
