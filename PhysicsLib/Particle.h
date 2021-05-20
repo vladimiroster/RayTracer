@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
+#include <ctime>
 
 #include "Collidable.h"
 
 #include "../RayTracerLib/Object.h"
 #include "../RayTracerLib/World.h"
 #include "../RayTracerLib/Cube.h"
+#include "../RayTracerLib/Sphere.h"
 
 namespace rt = RayTracer;
 

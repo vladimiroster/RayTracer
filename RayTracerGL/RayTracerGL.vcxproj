@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asteroids.cpp" />
     <ClCompile Include="RayTracerGL.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Shadows.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Asteroids.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
